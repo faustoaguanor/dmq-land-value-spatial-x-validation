@@ -1,7 +1,0 @@
-archivo,linea,motivo,extracto
-anexo_f.tex,40,afirmacion de confirmacion,"e márgenes un 17\% más anchos que el que supone independencia, lo que confirma que ignorar la dependencia entre predios vecinos subestima la incertidumbre."
-cap5_resultados.tex,80,atribuye superioridad a la familia," Figura~\ref{fig:6} resume, es contundente y contrario a lo esperado: Random Forest gana por un margen amplio. Su RMSE de 76,99 queda casi dieciséis puntos por debajo del siguiente modelo, y lo consig"
-cap5_resultados.tex,146,comparativo absoluto,Sí & No & Uno es mejor que el otro \\
-cap5_resultados.tex,183,atribuye superioridad a la familia,", donde SANNWR-adaptado, GWR y GNNWR aparecían indistinguibles y aquí SANNWR-adaptado gana por 4,4 USD/m$^{2}$. Las dos tablas miden errores distintos: aquella el error al cuadrado, que castiga sobre "
-cap5_resultados.tex,541,designacion de ganador,"es exploratorias produjo un RMSE de 72,88, que la habría situado como el mejor modelo del estudio. Sus diez réplicas posteriores dan 91,63 $\pm$ 12,16. La diferencia no se debe solo a la semilla, porq"
-cap6_conclusiones.tex,72,atribuye superioridad a la familia,"o encabezan la validación espacial (GNNWR sin degradación, $-$0,3\%); Random Forest domina la interpolación; la significancia frente a los modelos sin ponderación espacial con cinco regiones no se alc"

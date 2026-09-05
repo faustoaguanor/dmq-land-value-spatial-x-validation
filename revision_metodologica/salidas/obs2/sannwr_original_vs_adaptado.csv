@@ -1,5 +1,0 @@
-esquema,modelo,RMSE,RMSE_sd,MAE,R2,moran_I,pliegues,minutos
-BloquesEspaciales,SANNWR-adaptado,97.758,45.095,60.878,0.607,0.431,5,82.9
-BloquesEspaciales,SANNWR-original,105.723,50.897,64.535,0.551,0.424,5,81.5
-ConjuntoDePrueba20,SANNWR-adaptado,95.279,5.551,46.489,0.817,0.087,1,38.1
-ConjuntoDePrueba20,SANNWR-original,95.963,4.471,46.875,0.815,0.124,1,36.3

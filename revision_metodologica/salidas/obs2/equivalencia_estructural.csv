@@ -1,8 +1,0 @@
-codigo,comprobacion,esperado,obtenido,estado
-E1,salida = suma_k w_k(d)*beta_k^OLS*x_k,diferencia < 0.0001,max|dif| = 3.01e-06,PASA
-E2,con w=1 la prediccion coincide con OLS,diferencia < 0.0001,max|dif| = 5.61e-07,PASA
-E3,los coeficientes OLS no se entrenan,requires_grad=False y sin cambio tras un paso,"requires_grad=False, max|delta|=0.00e+00",PASA
-E4,la entrada es el vector de distancias a los n de entrenamiento,"ancho = n_train = 160, diagonal nula antes de escalar","ancho train=160, ancho test=160, diag_cero=True",PASA
-E5,distancias de evaluacion escaladas con el ajuste del entrenamiento,diferencia < 0.0001,max|dif| = 0.00e+00,PASA
-E6,"distancia hibrida 0,5/0,5 con peso fijo (no aprendido)","d = 0,5*z(esp) + 0,5*z(atr), alpha constante; diferencia < 0.0001","max|dif| = 1.89e-07, alpha=0.5, sin parametro alpha=True",PASA
-E7,SANNWR-original funde las dos distancias con una red entrenable,"entrada (n_eval, n_train, 2), SAPDNN 2->4->1 con parametros que cambian","forma=(40, 160, 2), parametros SAPDNN=19, cambio de la fusion tras un paso=8.74e-03",PASA

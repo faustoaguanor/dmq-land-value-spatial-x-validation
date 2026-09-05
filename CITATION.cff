@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the thesis and this repository."
-title: "DMQ land-value models under random and spatial validation, with methodological revision"
+title: "DMQ land-value models under random and spatial validation"
 type: software
 authors:
   - family-names: "Guano Rojas"
@@ -8,8 +8,8 @@ authors:
 repository-code: "https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation"
 url: "https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation"
 license: MIT
-version: 1.1.0
-date-released: 2026-09-05
+version: 1.0.0
+date-released: 2026-08-01
 keywords:
   - spatial cross-validation
   - urban land valuation
