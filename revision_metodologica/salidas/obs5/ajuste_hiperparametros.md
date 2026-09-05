@@ -15,8 +15,8 @@ Modelos: RF, HGB. Semillas: [42].
 | BloquesEspaciales  | RF     | 62.45        | 66.087      | 103.967       | 107.854      | 3.887         | 3.6          |
 | ConjuntoDePrueba20 | HGB    | 38.908       | 40.316      | 77.563        | 80.794       | 3.231         | 4.0          |
 | ConjuntoDePrueba20 | RF     | 37.507       | 37.507      | 76.638        | 76.638       | 0.0           | 0.0          |
-| RandomKFold        | HGB    | 39.185       | 40.448      | 78.338        | 80.988       | 2.65          | 3.27         |
-| RandomKFold        | RF     | 39.456       | 38.926      | 81.782        | 81.547       | -0.235        | -0.29        |
+| ValidacionAleatoria        | HGB    | 39.185       | 40.448      | 78.338        | 80.988       | 2.65          | 3.27         |
+| ValidacionAleatoria        | RF     | 39.456       | 38.926      | 81.782        | 81.547       | -0.235        | -0.29        |
 
 ## Configuraciones que elige el procedimiento
 
@@ -48,10 +48,10 @@ Modelos: RF, HGB. Semillas: [42].
 | ConjuntoDePrueba20 | HGB    | defecto  | 80.794  |         | 40.316 | 0.869 | 1        | 0.1     |
 | ConjuntoDePrueba20 | RF     | ajustado | 76.638  |         | 37.507 | 0.882 | 1        | 4.4     |
 | ConjuntoDePrueba20 | RF     | defecto  | 76.638  |         | 37.507 | 0.882 | 1        | 0.1     |
-| RandomKFold        | HGB    | ajustado | 78.338  | 6.789   | 39.185 | 0.877 | 5        | 17.5    |
-| RandomKFold        | HGB    | defecto  | 80.988  | 4.192   | 40.448 | 0.869 | 5        | 0.2     |
-| RandomKFold        | RF     | ajustado | 81.782  | 4.301   | 39.456 | 0.866 | 5        | 15.1    |
-| RandomKFold        | RF     | defecto  | 81.547  | 3.789   | 38.926 | 0.867 | 5        | 0.4     |
+| ValidacionAleatoria        | HGB    | ajustado | 78.338  | 6.789   | 39.185 | 0.877 | 5        | 17.5    |
+| ValidacionAleatoria        | HGB    | defecto  | 80.988  | 4.192   | 40.448 | 0.869 | 5        | 0.2     |
+| ValidacionAleatoria        | RF     | ajustado | 81.782  | 4.301   | 39.456 | 0.866 | 5        | 15.1    |
+| ValidacionAleatoria        | RF     | defecto  | 81.547  | 3.789   | 38.926 | 0.867 | 5        | 0.4     |
 
 ## Como leerlo
 

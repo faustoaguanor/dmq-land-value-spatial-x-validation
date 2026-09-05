@@ -16,8 +16,8 @@ variable de entorno `TESIS_REPO`; no los duplica.
 | `obs6_n_efectivo/` | Tamaño efectivo de la muestra | Tamaño efectivo bajo autocorrelación espacial del error y su efecto sobre la significancia de las pruebas pareadas. |
 | `obs7_interpretabilidad/` | Importancia con colinealidad alta | VIF de las 30 columnas y comparación entre importancia individual y agrupada por permutación. |
 
-Una observación adicional del revisor —que la validación por bloques espaciales
-funcionó parcialmente como conjunto de desarrollo— se documentó y se ejecutó
+Una observación adicional del revisor, que la validación por bloques espaciales
+funcionó parcialmente como conjunto de desarrollo, se documentó y se ejecutó
 (test ciego con regiones selladas por hash), pero **no se incluye en este
 repositorio**: no es lo que el revisor pidió explícitamente ni lo que describe
 el diseño de validación por bloques de la literatura de referencia (que rota
