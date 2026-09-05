@@ -1,0 +1,7 @@
+esquema,modelo,MAE_ajustado,MAE_defecto,RMSE_ajustado,RMSE_defecto,ganancia_RMSE,ganancia_pct
+BloquesEspaciales,HGB,65.314,64.358,105.663,105.8,0.137,0.13
+BloquesEspaciales,RF,62.45,66.087,103.967,107.854,3.887,3.6
+ConjuntoDePrueba20,HGB,38.908,40.316,77.563,80.794,3.231,4.0
+ConjuntoDePrueba20,RF,37.507,37.507,76.638,76.638,0.0,0.0
+RandomKFold,HGB,39.185,40.448,78.338,80.988,2.65,3.27
+RandomKFold,RF,39.456,38.926,81.782,81.547,-0.235,-0.29

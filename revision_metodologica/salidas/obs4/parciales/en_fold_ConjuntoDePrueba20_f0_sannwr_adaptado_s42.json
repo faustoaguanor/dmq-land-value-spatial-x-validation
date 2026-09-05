@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "SANNWR-adaptado",
+  "semilla": 42,
+  "semilla_efectiva": 3042,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 247.4,
+  "rapido": false,
+  "MAE": 44.7141,
+  "RMSE": 92.4876,
+  "MAPE": 31.6806,
+  "R2": 0.8281,
+  "R2_log": 0.7957,
+  "smearing_factor": 1.008087
+}

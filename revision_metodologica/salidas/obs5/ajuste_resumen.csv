@@ -1,0 +1,13 @@
+esquema,modelo,brazo,RMSE,RMSE_sd,MAE,R2,pliegues,minutos
+BloquesEspaciales,HGB,ajustado,105.663,55.566,65.314,0.564,5,17.1
+BloquesEspaciales,HGB,defecto,105.8,56.944,64.358,0.571,5,0.2
+BloquesEspaciales,RF,ajustado,103.967,56.689,62.45,0.597,5,13.8
+BloquesEspaciales,RF,defecto,107.854,59.297,66.087,0.565,5,0.4
+ConjuntoDePrueba20,HGB,ajustado,77.563,,38.908,0.879,1,5.2
+ConjuntoDePrueba20,HGB,defecto,80.794,,40.316,0.869,1,0.1
+ConjuntoDePrueba20,RF,ajustado,76.638,,37.507,0.882,1,4.4
+ConjuntoDePrueba20,RF,defecto,76.638,,37.507,0.882,1,0.1
+RandomKFold,HGB,ajustado,78.338,6.789,39.185,0.877,5,17.5
+RandomKFold,HGB,defecto,80.988,4.192,40.448,0.869,5,0.2
+RandomKFold,RF,ajustado,81.782,4.301,39.456,0.866,5,15.1
+RandomKFold,RF,defecto,81.547,3.789,38.926,0.867,5,0.4

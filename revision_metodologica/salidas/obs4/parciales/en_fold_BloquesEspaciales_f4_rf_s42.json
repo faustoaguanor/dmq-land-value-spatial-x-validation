@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 4,
+  "modelo": "RF",
+  "semilla": 42,
+  "semilla_efectiva": 1046,
+  "n_train": 3288,
+  "n_eval": 752,
+  "segundos": 4.9,
+  "rapido": false,
+  "MAE": 31.0853,
+  "RMSE": 44.3354,
+  "MAPE": 25.1587,
+  "R2": 0.441,
+  "R2_log": 0.4817,
+  "smearing_factor": 1.004414
+}

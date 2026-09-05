@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "GNNWR",
+  "semilla": 42,
+  "semilla_efectiva": 3042,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 254.9,
+  "rapido": false,
+  "MAE": 48.9896,
+  "RMSE": 99.2799,
+  "MAPE": 29.6126,
+  "R2": 0.802,
+  "R2_log": 0.808,
+  "smearing_factor": 1.025965
+}

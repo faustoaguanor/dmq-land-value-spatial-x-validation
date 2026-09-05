@@ -1,0 +1,19 @@
+{
+  "esquema": "BloquesEspaciales",
+  "pliegue": 4,
+  "modelo": "SANNWR-adaptado",
+  "semilla": 42,
+  "semilla_efectiva": 1046,
+  "n_train": 3288,
+  "n_eval": 752,
+  "segundos": 190.5,
+  "rapido": false,
+  "moran_I": 0.402302,
+  "moran_p": 0.001,
+  "MAE": 31.8845,
+  "RMSE": 44.9514,
+  "MAPE": 26.8277,
+  "R2": 0.4254,
+  "R2_log": 0.4773,
+  "smearing_factor": 1.011557
+}

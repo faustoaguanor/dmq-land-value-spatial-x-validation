@@ -1,0 +1,17 @@
+{
+  "esquema": "RandomKFold",
+  "pliegue": 4,
+  "modelo": "RF",
+  "brazo": "ajustado",
+  "semilla": 42,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 174.5,
+  "hiperparametros": "{\"n_estimators\": 800, \"max_features\": 1.0, \"min_samples_leaf\": 1}",
+  "MAE": 39.3921,
+  "RMSE": 83.0486,
+  "MAPE": 17.839,
+  "R2": 0.8768,
+  "R2_log": 0.89,
+  "smearing_factor": 1.004706
+}

@@ -1,0 +1,17 @@
+{
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "HGB",
+  "brazo": "defecto",
+  "semilla": 42,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 8.0,
+  "hiperparametros": "\"por defecto\"",
+  "MAE": 40.3161,
+  "RMSE": 80.7942,
+  "MAPE": 22.3561,
+  "R2": 0.8689,
+  "R2_log": 0.8403,
+  "smearing_factor": 1.006142
+}

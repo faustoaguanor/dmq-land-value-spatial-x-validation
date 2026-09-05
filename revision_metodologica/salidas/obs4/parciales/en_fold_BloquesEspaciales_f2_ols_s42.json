@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 2,
+  "modelo": "OLS",
+  "semilla": 42,
+  "semilla_efectiva": 1044,
+  "n_train": 3348,
+  "n_eval": 692,
+  "segundos": 0.0,
+  "rapido": false,
+  "MAE": 137.5434,
+  "RMSE": 214.5737,
+  "MAPE": 70.1472,
+  "R2": 0.4404,
+  "R2_log": 0.529,
+  "smearing_factor": 1.080971
+}

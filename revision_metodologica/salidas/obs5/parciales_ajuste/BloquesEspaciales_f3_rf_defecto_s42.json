@@ -1,0 +1,17 @@
+{
+  "esquema": "BloquesEspaciales",
+  "pliegue": 3,
+  "modelo": "RF",
+  "brazo": "defecto",
+  "semilla": 42,
+  "n_train": 2802,
+  "n_eval": 1238,
+  "segundos": 3.9,
+  "hiperparametros": "\"por defecto\"",
+  "MAE": 68.554,
+  "RMSE": 123.1754,
+  "MAPE": 30.085,
+  "R2": 0.6407,
+  "R2_log": 0.5471,
+  "smearing_factor": 1.003806
+}

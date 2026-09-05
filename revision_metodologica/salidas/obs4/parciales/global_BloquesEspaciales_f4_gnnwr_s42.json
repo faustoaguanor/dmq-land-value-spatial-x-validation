@@ -1,0 +1,18 @@
+{
+  "brazo": "global",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 4,
+  "modelo": "GNNWR",
+  "semilla": 42,
+  "semilla_efectiva": 1046,
+  "n_train": 3288,
+  "n_eval": 752,
+  "segundos": 188.4,
+  "rapido": false,
+  "MAE": 29.5094,
+  "RMSE": 41.7716,
+  "MAPE": 24.9657,
+  "R2": 0.5038,
+  "R2_log": 0.5448,
+  "smearing_factor": 1.036773
+}

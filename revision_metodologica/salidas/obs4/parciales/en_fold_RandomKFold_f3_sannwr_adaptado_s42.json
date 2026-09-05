@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "RandomKFold",
+  "pliegue": 3,
+  "modelo": "SANNWR-adaptado",
+  "semilla": 42,
+  "semilla_efectiva": 45,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 173.4,
+  "rapido": false,
+  "MAE": 44.848,
+  "RMSE": 96.4226,
+  "MAPE": 21.7261,
+  "R2": 0.8213,
+  "R2_log": 0.8474,
+  "smearing_factor": 1.027754
+}

@@ -1,0 +1,18 @@
+{
+  "brazo": "global",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 2,
+  "modelo": "GWR",
+  "semilla": 42,
+  "semilla_efectiva": 1044,
+  "n_train": 3348,
+  "n_eval": 692,
+  "segundos": 63.2,
+  "rapido": false,
+  "MAE": 106.1862,
+  "RMSE": 169.4438,
+  "MAPE": 58.2721,
+  "R2": 0.6511,
+  "R2_log": 0.6069,
+  "smearing_factor": 1.023465
+}

@@ -1,0 +1,17 @@
+{
+  "esquema": "RandomKFold",
+  "pliegue": 2,
+  "modelo": "RF",
+  "brazo": "defecto",
+  "semilla": 42,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 5.1,
+  "hiperparametros": "\"por defecto\"",
+  "MAE": 37.4849,
+  "RMSE": 86.4035,
+  "MAPE": 18.9514,
+  "R2": 0.8442,
+  "R2_log": 0.8643,
+  "smearing_factor": 1.004951
+}

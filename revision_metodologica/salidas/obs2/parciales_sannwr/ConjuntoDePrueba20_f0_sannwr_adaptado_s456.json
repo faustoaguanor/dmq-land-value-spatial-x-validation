@@ -1,0 +1,19 @@
+{
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "SANNWR-adaptado",
+  "semilla": 456,
+  "semilla_efectiva": 3456,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 258.3,
+  "rapido": false,
+  "moran_I": 0.068634,
+  "moran_p": 0.001,
+  "MAE": 44.505,
+  "RMSE": 90.117,
+  "MAPE": 30.1922,
+  "R2": 0.8368,
+  "R2_log": 0.8144,
+  "smearing_factor": 1.007583
+}

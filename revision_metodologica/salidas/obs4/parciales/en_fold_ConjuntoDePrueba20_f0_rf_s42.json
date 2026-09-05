@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "RF",
+  "semilla": 42,
+  "semilla_efectiva": 3042,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 6.1,
+  "rapido": false,
+  "MAE": 37.4935,
+  "RMSE": 76.5953,
+  "MAPE": 20.3649,
+  "R2": 0.8821,
+  "R2_log": 0.8537,
+  "smearing_factor": 1.004345
+}

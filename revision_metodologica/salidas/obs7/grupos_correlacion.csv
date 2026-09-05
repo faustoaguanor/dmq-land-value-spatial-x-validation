@@ -1,0 +1,19 @@
+grupo,n_variables,variables
+1,1,dist_parque_metro
+2,1,dist_industrial
+3,1,cos_num
+4,1,dist_quebrada
+5,1,pendiente_grados
+6,1,uso_02
+7,3,"log_area, frente_m, es_ph"
+8,1,pc_pnbi
+9,1,dist_centr_zonal
+10,6,"area_const_m2, tiene_const, num_pisos, antiguedad, conservacion_cod, acabados_cod"
+11,3,"dist_cc, dist_universidad, dist_plataforma_gub"
+12,4,"dist_metro, dist_centr_metro, dist_hospital, dist_mercado_mayorista"
+13,1,dist_via_principal
+14,1,uso_06
+15,1,suscept_codigo
+16,1,uso_03
+17,1,topografia_factor
+18,1,uso_otros

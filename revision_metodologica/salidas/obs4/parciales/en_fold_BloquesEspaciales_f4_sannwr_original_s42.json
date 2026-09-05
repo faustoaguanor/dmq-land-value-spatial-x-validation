@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 4,
+  "modelo": "SANNWR-original",
+  "semilla": 42,
+  "semilla_efectiva": 1046,
+  "n_train": 3288,
+  "n_eval": 752,
+  "segundos": 125.4,
+  "rapido": false,
+  "MAE": 32.66,
+  "RMSE": 44.6938,
+  "MAPE": 26.4382,
+  "R2": 0.4319,
+  "R2_log": 0.489,
+  "smearing_factor": 1.02304
+}
