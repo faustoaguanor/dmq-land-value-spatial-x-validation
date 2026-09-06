@@ -1,7 +1,8 @@
 # Revisión metodológica
 
 Código que responde, con evidencia ejecutable, a las observaciones metodológicas
-de un revisor formal de la tesis (Anexos A–F, C.6–C.8 y F del documento final).
+de un revisor formal de la tesis (Anexos A, F y C.5–C.8 del documento final; no
+los Anexos D y E, que no se relacionan con estas observaciones).
 Reutiliza los datos y módulos del repositorio principal por referencia, vía la
 variable de entorno `TESIS_REPO`; no los duplica.
 
