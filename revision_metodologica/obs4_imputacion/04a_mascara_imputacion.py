@@ -130,9 +130,11 @@ def main() -> int:
     p_md = salida("obs4", "mascara_imputacion.md")
     p_md.write_text("\n".join(md), encoding="utf-8")
 
-    # la mascara, para que 04b no la recalcule con otro criterio
+    # Copia publica sin predio_join: identificaria registros individuales del
+    # catastro restringido (Anexo B). El repositorio de trabajo si conserva la
+    # clave para que 04b pueda recalcular la mascara con el mismo criterio.
     p_mask = salida("obs4", "mascara_imputacion.csv")
-    M.assign(predio_join=conj.predio).to_csv(p_mask, index=False)
+    M.to_csv(p_mask, index=False)
 
     pr(f"\nceldas imputadas: {int(M.values.sum())} en {len(M.columns)} variables, "
        f"{filas_afectadas} predios afectados")
