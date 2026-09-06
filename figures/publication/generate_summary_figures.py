@@ -15,6 +15,10 @@ OUTPUT = RESULTS / "figures"
 OUTPUT.mkdir(parents=True, exist_ok=True)
 
 MODEL_ORDER = ["Random Forest", "SANNWR", "GWR", "GNNWR", "OLS"]
+# La clave de los CSV es "SANNWR"; lo que se dibuja es "SANNWR-adaptado",
+# porque lo evaluado es la variante de peso fijo y no la arquitectura de
+# Ni et al. (2022), que no se implemento como modelo principal.
+ETIQUETA = {m: ("SANNWR-adaptado" if m == "SANNWR" else m) for m in MODEL_ORDER}
 COLORS = {
     "Random Forest": "#E69F00",
     "SANNWR": "#009E73",
@@ -66,7 +70,7 @@ def validation_comparison() -> None:
 
     ax.set_title("El modelo seleccionado cambia con el esquema de validación", weight="bold", pad=14)
     ax.set_ylabel("RMSE (USD/m²)")
-    ax.set_xticks(x, MODEL_ORDER)
+    ax.set_xticks(x, [ETIQUETA[m] for m in MODEL_ORDER])
     ax.set_ylim(0, 225)
     ax.grid(axis="y", alpha=0.22)
     ax.set_axisbelow(True)
@@ -89,7 +93,8 @@ def stability() -> None:
     frame = pd.read_csv(RESULTS / "estabilidad_conjunto_prueba.csv")
     fig, ax = plt.subplots(figsize=(8.5, 5.2))
     colors = [COLORS[name] for name in frame["model"]]
-    bars = ax.barh(frame["model"], frame["rmse_mean"], xerr=frame["rmse_sd"], color=colors, capsize=4)
+    bars = ax.barh([ETIQUETA[m] for m in frame["model"]], frame["rmse_mean"],
+                   xerr=frame["rmse_sd"], color=colors, capsize=4)
     ax.bar_label(bars, labels=[f"{m:.2f} ± {s:.2f}" for m, s in zip(frame["rmse_mean"], frame["rmse_sd"])], padding=5)
     ax.invert_yaxis()
     ax.set_xlim(0, 110)

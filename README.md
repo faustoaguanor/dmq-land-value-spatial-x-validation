@@ -15,7 +15,7 @@ Código y resultados agregados de la tesis:
 
 ## Idea central
 
-El repositorio compara cinco modelos (OLS, GWR, Random Forest, GNNWR y SANNWR) bajo esquemas de evaluación con separación geográfica creciente. El aporte no es una arquitectura nueva: es un protocolo reproducible que muestra que el modelo aparentemente ganador cambia cuando entrenamiento y prueba dejan de estar espacialmente entremezclados.
+El repositorio compara cinco modelos (OLS, GWR, Random Forest, GNNWR y SANNWR-adaptado) bajo esquemas de evaluación con separación geográfica creciente. El aporte no es una arquitectura nueva: es un protocolo reproducible que muestra que el modelo aparentemente ganador cambia cuando entrenamiento y prueba dejan de estar espacialmente entremezclados.
 
 ![Comparación de esquemas de validación](results/figures/validation_comparison.png)
 
@@ -24,19 +24,21 @@ El repositorio compara cinco modelos (OLS, GWR, Random Forest, GNNWR y SANNWR) b
 | Modelo | Conjunto de prueba RMSE | Validación cruzada aleatoria RMSE | Validación por bloques espaciales RMSE |
 |---|---:|---:|---:|
 | Random Forest | **76.99** | **80.9 ± 3.3** | 108.8 ± 60.4 |
-| SANNWR | 92.70 | 93.5 ± 5.4 | 98.7 ± 50.6 |
+| SANNWR-adaptado | 92.70 | 93.5 ± 5.4 | 98.7 ± 50.6 |
 | GWR | 98.15 | 97.2 ± 8.0 | 108.5 ± 58.3 |
 | GNNWR | 98.76 | 91.4 ± 21.8 | **98.5 ± 53.1** |
 | OLS | 139.01 | 141.7 ± 7.5 | 135.8 ± 74.1 |
 
 Métricas en USD/m². El conjunto de prueba usa retransformación con *smearing* de Duan. En la validación por bloques espaciales, la dispersión corresponde a los cinco bloques territoriales; no debe confundirse con la variación entre semillas.
 
+**SANNWR-adaptado** designa lo que este repositorio entrena y mide: la propuesta de Ni et al. (2022) con la combinación de distancia espacial y de atributos fijada en 0,5/0,5 en vez de aprendida. Ninguna cifra de aquí valida la arquitectura publicada, que no se implementó como modelo principal. En los CSV y en el código la columna conserva el nombre corto `SANNWR`.
+
 Hallazgos:
 
 - Random Forest domina la interpolación, sin usar coordenadas.
 - Al pasar del conjunto de prueba a la validación por bloques espaciales, su RMSE aumenta 41.3 % y cae al tercer puesto compartido.
 - GNNWR encabeza la validación por bloques espaciales y es el único modelo competitivo que no se degrada respecto del conjunto de prueba.
-- Con solo cinco regiones, la ventaja de GNNWR/SANNWR frente a Random Forest no alcanza significancia robusta: se reporta como tendencia, no como superioridad establecida.
+- Con solo cinco regiones, la ventaja de GNNWR/SANNWR-adaptado frente a Random Forest no alcanza significancia robusta: se reporta como tendencia, no como superioridad establecida.
 - Ningún modelo elimina la autocorrelación residual.
 
 Las tablas canónicas están en [`results/`](results/) y los resultados agregados de cada ejecución en [`results/raw/`](results/raw/). No se publican predicciones ni errores por predio.
