@@ -1,0 +1,5 @@
+variable,n_celdas,en_entrenamiento,en_prueba,regiones_afectadas
+frente_m,134,117,17,10
+log_area,131,115,16,10
+area_const_m2,131,115,16,10
+pendiente_grados,37,33,4,9

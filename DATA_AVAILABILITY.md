@@ -43,4 +43,4 @@ Los archivos excluidos incluyen:
 - mapas o tablas que permitan reconstruir ubicaciones individuales;
 - capas fuente GDB, SHP, TIF y productos intermedios.
 
-Los CSV publicados en `results/` contienen únicamente métricas agregadas por modelo, estrategia, semilla o partición.
+Los CSV publicados en `results/` y en `revision_metodologica/salidas/` contienen únicamente métricas agregadas por modelo, estrategia, semilla o partición. Se aplica el mismo criterio a los artefactos de entrenamiento (checkpoints, registros de ejecución en pod) generados durante la revisión metodológica: no se distribuyen.

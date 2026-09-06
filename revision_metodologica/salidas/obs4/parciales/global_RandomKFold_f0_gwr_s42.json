@@ -1,0 +1,18 @@
+{
+  "brazo": "global",
+  "esquema": "RandomKFold",
+  "pliegue": 0,
+  "modelo": "GWR",
+  "semilla": 42,
+  "semilla_efectiva": 42,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 57.3,
+  "rapido": false,
+  "MAE": 45.9325,
+  "RMSE": 83.2079,
+  "MAPE": 28.8065,
+  "R2": 0.8515,
+  "R2_log": 0.8108,
+  "smearing_factor": 1.024777
+}

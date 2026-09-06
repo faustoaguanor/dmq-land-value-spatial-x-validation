@@ -1,0 +1,17 @@
+{
+  "esquema": "RandomKFold",
+  "pliegue": 4,
+  "modelo": "HGB",
+  "brazo": "ajustado",
+  "semilla": 42,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 209.6,
+  "hiperparametros": "{\"max_iter\": 800, \"learning_rate\": 0.05, \"max_leaf_nodes\": 31, \"min_samples_leaf\": 20}",
+  "MAE": 39.3567,
+  "RMSE": 80.7311,
+  "MAPE": 17.901,
+  "R2": 0.8836,
+  "R2_log": 0.8915,
+  "smearing_factor": 1.001335
+}

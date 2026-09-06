@@ -1,0 +1,18 @@
+{
+  "brazo": "global",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 0,
+  "modelo": "RF",
+  "semilla": 42,
+  "semilla_efectiva": 1042,
+  "n_train": 3444,
+  "n_eval": 596,
+  "segundos": 5.3,
+  "rapido": false,
+  "MAE": 33.1513,
+  "RMSE": 46.7691,
+  "MAPE": 29.2395,
+  "R2": 0.3602,
+  "R2_log": 0.3896,
+  "smearing_factor": 1.003694
+}

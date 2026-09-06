@@ -41,6 +41,17 @@ Hallazgos:
 
 Las tablas canónicas están en [`results/`](results/) y los resultados agregados de cada ejecución en [`results/raw/`](results/raw/). No se publican predicciones ni errores por predio.
 
+## Revisión metodológica
+
+Este repositorio incorpora, además del pipeline anterior, el código que responde
+con evidencia ejecutable a las observaciones de un revisor formal de la tesis:
+equivalencia estructural y numérica con las arquitecturas publicadas, alcance
+de la fuga de imputación, homogeneidad del ajuste de hiperparámetros entre
+modelos, tamaño efectivo de la muestra bajo autocorrelación espacial e
+importancia de variables con colinealidad alta. Ver
+[`revision_metodologica/README.md`](revision_metodologica/README.md) para el
+detalle de cada observación y cómo reproducirla.
+
 ## Datos no incluidos
 
 **Este repositorio no contiene datos prediales, coordenadas individuales, claves catastrales ni observaciones de investigación de mercado.** El conjunto utilizado combina información institucional cuya redistribución no está autorizada.
@@ -61,7 +72,8 @@ Consulta [`DATA_AVAILABILITY.md`](DATA_AVAILABILITY.md) para conocer las fuentes
 ├── figures/             scripts de figuras; sin datos cartográficos publicados
 ├── results/             tablas canónicas, métricas agregadas y figuras seguras
 ├── datos/README.md      contrato de datos, sin registros reales
-└── tests/               controles de publicación y reproducibilidad
+├── tests/               controles de publicación y reproducibilidad
+└── revision_metodologica/  respuesta a las observaciones de un revisor formal
 ```
 
 ## Instalación

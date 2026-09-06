@@ -1,0 +1,45 @@
+esquema,pliegue,modelo,brazo,semilla,n_train,n_eval,segundos,hiperparametros,MAE,RMSE,MAPE,R2,R2_log,smearing_factor
+BloquesEspaciales,0,HGB,ajustado,42,3444,596,205.4,"{""max_iter"": 400, ""learning_rate"": 0.05, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 10}",31.6423,44.0256,27.2773,0.4331,0.4473,1.004394
+BloquesEspaciales,0,HGB,defecto,42,3444,596,2.2,"""por defecto""",31.117,43.7458,26.871,0.4403,0.4498,1.005069
+BloquesEspaciales,0,RF,ajustado,42,3444,596,175.5,"{""n_estimators"": 300, ""max_features"": 0.5, ""min_samples_leaf"": 5}",31.0054,44.2226,27.2358,0.428,0.4583,1.015226
+BloquesEspaciales,0,RF,defecto,42,3444,596,4.9,"""por defecto""",33.1513,46.7691,29.2395,0.3602,0.3896,1.003694
+BloquesEspaciales,1,HGB,ajustado,42,3278,762,204.8,"{""max_iter"": 400, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 10}",91.715,161.73,31.446,0.7062,0.8103,1.000901
+BloquesEspaciales,1,HGB,defecto,42,3278,762,2.4,"""por defecto""",90.2569,166.649,29.3512,0.6881,0.8153,1.004844
+BloquesEspaciales,1,RF,ajustado,42,3278,762,168.4,"{""n_estimators"": 300, ""max_features"": 0.33, ""min_samples_leaf"": 1}",85.2871,159.5811,29.8947,0.714,0.8175,1.004044
+BloquesEspaciales,1,RF,defecto,42,3278,762,4.9,"""por defecto""",93.9665,169.23,32.3685,0.6784,0.793,1.003556
+BloquesEspaciales,2,HGB,ajustado,42,3348,692,205.6,"{""max_iter"": 400, ""learning_rate"": 0.05, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}",98.4956,147.8794,46.8686,0.7342,0.6667,1.004734
+BloquesEspaciales,2,HGB,defecto,42,3348,692,2.3,"""por defecto""",98.4956,147.8794,46.8686,0.7342,0.6667,1.004734
+BloquesEspaciales,2,RF,ajustado,42,3348,692,173.3,"{""n_estimators"": 800, ""max_features"": 0.5, ""min_samples_leaf"": 2}",96.3768,149.5993,47.8717,0.728,0.6697,1.005698
+BloquesEspaciales,2,RF,defecto,42,3348,692,4.9,"""por defecto""",103.6626,155.7683,50.6529,0.7051,0.639,1.002757
+BloquesEspaciales,3,HGB,ajustado,42,2802,1238,208.6,"{""max_iter"": 400, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}",70.3793,125.7727,30.8169,0.6254,0.5326,1.000795
+BloquesEspaciales,3,HGB,defecto,42,2802,1238,2.3,"""por defecto""",68.5224,122.8541,30.6115,0.6426,0.5484,1.003438
+BloquesEspaciales,3,RF,ajustado,42,2802,1238,142.6,"{""n_estimators"": 300, ""max_features"": 0.33, ""min_samples_leaf"": 5}",68.7903,123.5199,30.5867,0.6387,0.577,1.015071
+BloquesEspaciales,3,RF,defecto,42,2802,1238,3.9,"""por defecto""",68.554,123.1754,30.085,0.6407,0.5471,1.003806
+BloquesEspaciales,4,HGB,ajustado,42,3288,752,202.6,"{""max_iter"": 400, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}",34.3373,48.908,27.6508,0.3197,0.4387,1.001403
+BloquesEspaciales,4,HGB,defecto,42,3288,752,2.3,"""por defecto""",33.3972,47.8734,26.9262,0.3482,0.4627,1.005136
+BloquesEspaciales,4,RF,ajustado,42,3288,752,166.2,"{""n_estimators"": 300, ""max_features"": 0.33, ""min_samples_leaf"": 2}",30.7916,42.9116,25.6476,0.4763,0.493,1.00692
+BloquesEspaciales,4,RF,defecto,42,3288,752,4.6,"""por defecto""",31.0996,44.3258,25.1695,0.4412,0.4819,1.004418
+ConjuntoDePrueba20,0,HGB,ajustado,42,4040,1011,311.7,"{""max_iter"": 400, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}",38.9079,77.5628,21.2273,0.8791,0.8472,1.001919
+ConjuntoDePrueba20,0,HGB,defecto,42,4040,1011,8.0,"""por defecto""",40.3161,80.7942,22.3561,0.8689,0.8403,1.006142
+ConjuntoDePrueba20,0,RF,ajustado,42,4040,1011,263.0,"{""n_estimators"": 300, ""max_features"": 1.0, ""min_samples_leaf"": 1}",37.5068,76.6382,20.329,0.882,0.854,1.004354
+ConjuntoDePrueba20,0,RF,defecto,42,4040,1011,6.9,"""por defecto""",37.5068,76.6382,20.329,0.882,0.854,1.004354
+RandomKFold,0,HGB,ajustado,42,3232,808,217.1,"{""max_iter"": 400, ""learning_rate"": 0.05, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 10}",41.506,76.3701,20.9404,0.8749,0.8569,1.003916
+RandomKFold,0,HGB,defecto,42,3232,808,2.3,"""por defecto""",41.719,76.1893,21.9577,0.8755,0.8493,1.004708
+RandomKFold,0,RF,ajustado,42,3232,808,195.4,"{""n_estimators"": 800, ""max_features"": 1.0, ""min_samples_leaf"": 1}",39.7298,75.4116,20.7427,0.878,0.8613,1.003633
+RandomKFold,0,RF,defecto,42,3232,808,4.8,"""por defecto""",39.8128,76.3147,20.8428,0.8751,0.8604,1.003794
+RandomKFold,1,HGB,ajustado,42,3232,808,212.7,"{""max_iter"": 800, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 10}",37.7812,67.4287,18.9842,0.9069,0.8738,1.000087
+RandomKFold,1,HGB,defecto,42,3232,808,2.3,"""por defecto""",40.3333,77.1301,20.1611,0.8782,0.8675,1.004964
+RandomKFold,1,RF,ajustado,42,3232,808,193.8,"{""n_estimators"": 800, ""max_features"": 1.0, ""min_samples_leaf"": 1}",39.4919,79.7529,21.4782,0.8698,0.8554,1.004285
+RandomKFold,1,RF,defecto,42,3232,808,5.5,"""por defecto""",39.3246,80.1063,21.3619,0.8686,0.8561,1.004521
+RandomKFold,2,HGB,ajustado,42,3232,808,203.9,"{""max_iter"": 400, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 10}",36.643,82.9347,18.8146,0.8564,0.873,1.000891
+RandomKFold,2,HGB,defecto,42,3232,808,2.3,"""por defecto""",39.1827,84.5273,20.0721,0.8508,0.865,1.00512
+RandomKFold,2,RF,ajustado,42,3232,808,172.8,"{""n_estimators"": 300, ""max_features"": 1.0, ""min_samples_leaf"": 1}",37.4849,86.4035,18.9514,0.8442,0.8643,1.004951
+RandomKFold,2,RF,defecto,42,3232,808,5.1,"""por defecto""",37.4849,86.4035,18.9514,0.8442,0.8643,1.004951
+RandomKFold,3,HGB,ajustado,42,3232,808,205.6,"{""max_iter"": 400, ""learning_rate"": 0.1, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 10}",40.6371,84.2234,20.4563,0.8636,0.8599,1.000987
+RandomKFold,3,HGB,defecto,42,3232,808,2.1,"""por defecto""",40.8454,85.3858,20.3704,0.8599,0.8633,1.00504
+RandomKFold,3,RF,ajustado,42,3232,808,168.1,"{""n_estimators"": 300, ""max_features"": 0.5, ""min_samples_leaf"": 5}",41.1818,84.2956,21.0324,0.8634,0.8559,1.016198
+RandomKFold,3,RF,defecto,42,3232,808,4.6,"""por defecto""",38.2254,81.2882,19.5196,0.873,0.866,1.004181
+RandomKFold,4,HGB,ajustado,42,3232,808,209.6,"{""max_iter"": 800, ""learning_rate"": 0.05, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}",39.3567,80.7311,17.901,0.8836,0.8915,1.001335
+RandomKFold,4,HGB,defecto,42,3232,808,2.2,"""por defecto""",40.1576,81.7096,18.2848,0.8808,0.888,1.005232
+RandomKFold,4,RF,ajustado,42,3232,808,174.5,"{""n_estimators"": 800, ""max_features"": 1.0, ""min_samples_leaf"": 1}",39.3921,83.0486,17.839,0.8768,0.89,1.004706
+RandomKFold,4,RF,defecto,42,3232,808,4.5,"""por defecto""",39.7826,83.6227,17.8903,0.8751,0.8897,1.004643

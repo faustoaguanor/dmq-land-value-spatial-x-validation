@@ -1,0 +1,19 @@
+{
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "SANNWR-original",
+  "semilla": 456,
+  "semilla_efectiva": 3456,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 264.2,
+  "rapido": false,
+  "moran_I": 0.039427,
+  "moran_p": 0.003,
+  "MAE": 43.8989,
+  "RMSE": 91.3644,
+  "MAPE": 30.1728,
+  "R2": 0.8323,
+  "R2_log": 0.7824,
+  "smearing_factor": 1.005439
+}

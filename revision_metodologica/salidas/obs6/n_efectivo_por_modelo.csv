@@ -1,0 +1,6 @@
+variable,n,moran_I,moran_p,rho0,rango_m,n_efectivo,pct_del_nominal
+error absoluto OLS,1011,0.5228,0.001,1.0,1990.8,22.8,2.3
+error absoluto GWR,1011,0.4304,0.001,0.9649,1891.6,25.5,2.5
+error absoluto GNNWR,1011,0.4539,0.001,0.988,1838.2,26.1,2.6
+error absoluto SANNWR-adaptado,1011,0.3632,0.001,0.7764,1850.5,32.6,3.2
+error absoluto RF,1011,0.3472,0.001,0.6433,1933.7,36.6,3.6

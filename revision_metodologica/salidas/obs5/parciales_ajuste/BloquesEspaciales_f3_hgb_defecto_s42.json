@@ -1,0 +1,17 @@
+{
+  "esquema": "BloquesEspaciales",
+  "pliegue": 3,
+  "modelo": "HGB",
+  "brazo": "defecto",
+  "semilla": 42,
+  "n_train": 2802,
+  "n_eval": 1238,
+  "segundos": 2.3,
+  "hiperparametros": "\"por defecto\"",
+  "MAE": 68.5224,
+  "RMSE": 122.8541,
+  "MAPE": 30.6115,
+  "R2": 0.6426,
+  "R2_log": 0.5484,
+  "smearing_factor": 1.003438
+}

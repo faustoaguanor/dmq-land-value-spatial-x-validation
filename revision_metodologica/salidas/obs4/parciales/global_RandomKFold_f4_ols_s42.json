@@ -1,0 +1,18 @@
+{
+  "brazo": "global",
+  "esquema": "RandomKFold",
+  "pliegue": 4,
+  "modelo": "OLS",
+  "semilla": 42,
+  "semilla_efectiva": 46,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 0.0,
+  "rapido": false,
+  "MAE": 76.5374,
+  "RMSE": 152.8227,
+  "MAPE": 36.3171,
+  "R2": 0.5829,
+  "R2_log": 0.6901,
+  "smearing_factor": 1.089944
+}

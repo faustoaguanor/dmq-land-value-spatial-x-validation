@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "RandomKFold",
+  "pliegue": 4,
+  "modelo": "GNNWR",
+  "semilla": 42,
+  "semilla_efectiva": 46,
+  "n_train": 3232,
+  "n_eval": 808,
+  "segundos": 220.2,
+  "rapido": false,
+  "MAE": 50.8769,
+  "RMSE": 107.0327,
+  "MAPE": 22.3861,
+  "R2": 0.7954,
+  "R2_log": 0.8555,
+  "smearing_factor": 1.015352
+}

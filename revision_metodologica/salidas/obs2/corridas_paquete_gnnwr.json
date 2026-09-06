@@ -1,0 +1,41 @@
+{
+  "paquete": "?",
+  "corridas": [
+    {
+      "config": "paquete",
+      "semilla": 42,
+      "estado": "fallo",
+      "error": "cannot import name 'models' from 'gnnwr' (unknown location)"
+    },
+    {
+      "config": "paquete",
+      "semilla": 2011,
+      "estado": "fallo",
+      "error": "cannot import name 'models' from 'gnnwr' (unknown location)"
+    },
+    {
+      "config": "paquete",
+      "semilla": 456,
+      "estado": "fallo",
+      "error": "cannot import name 'models' from 'gnnwr' (unknown location)"
+    },
+    {
+      "config": "tesis",
+      "semilla": 42,
+      "estado": "fallo",
+      "error": "cannot import name 'models' from 'gnnwr' (unknown location)"
+    },
+    {
+      "config": "tesis",
+      "semilla": 2011,
+      "estado": "fallo",
+      "error": "cannot import name 'models' from 'gnnwr' (unknown location)"
+    },
+    {
+      "config": "tesis",
+      "semilla": 456,
+      "estado": "fallo",
+      "error": "cannot import name 'models' from 'gnnwr' (unknown location)"
+    }
+  ]
+}

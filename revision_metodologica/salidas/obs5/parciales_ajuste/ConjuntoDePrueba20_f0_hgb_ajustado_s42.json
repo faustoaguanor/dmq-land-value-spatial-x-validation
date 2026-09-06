@@ -1,0 +1,17 @@
+{
+  "esquema": "ConjuntoDePrueba20",
+  "pliegue": 0,
+  "modelo": "HGB",
+  "brazo": "ajustado",
+  "semilla": 42,
+  "n_train": 4040,
+  "n_eval": 1011,
+  "segundos": 311.7,
+  "hiperparametros": "{\"max_iter\": 400, \"learning_rate\": 0.1, \"max_leaf_nodes\": 31, \"min_samples_leaf\": 20}",
+  "MAE": 38.9079,
+  "RMSE": 77.5628,
+  "MAPE": 21.2273,
+  "R2": 0.8791,
+  "R2_log": 0.8472,
+  "smearing_factor": 1.001919
+}

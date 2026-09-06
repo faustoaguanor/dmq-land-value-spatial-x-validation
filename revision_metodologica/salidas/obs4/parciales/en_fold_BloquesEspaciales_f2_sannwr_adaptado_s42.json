@@ -1,0 +1,18 @@
+{
+  "brazo": "en_fold",
+  "esquema": "BloquesEspaciales",
+  "pliegue": 2,
+  "modelo": "SANNWR-adaptado",
+  "semilla": 42,
+  "semilla_efectiva": 1044,
+  "n_train": 3348,
+  "n_eval": 692,
+  "segundos": 172.1,
+  "rapido": false,
+  "MAE": 96.3252,
+  "RMSE": 148.8899,
+  "MAPE": 52.3551,
+  "R2": 0.7306,
+  "R2_log": 0.6295,
+  "smearing_factor": 1.01184
+}
