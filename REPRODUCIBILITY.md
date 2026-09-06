@@ -53,7 +53,7 @@ Son los tres esquemas que compara la tesis. Una versión anterior del trabajo ev
 
 ## Modelos publicados
 
-La tesis compara cinco modelos: OLS, GWR, Random Forest, GNNWR y SANNWR. El directorio `modelos/` contiene además las variantes que el trabajo ejecutó y que los anexos documentan o que la consolidación de `analisis/analisis_log.py` sigue leyendo: MLP, GSAWR, GWR sobre 17 variables y la variante de SANNWR con grilla de referencia. Se conservan para que el análisis sea ejecutable de extremo a extremo y para dejar constancia de lo que se probó, no porque el documento las reporte.
+La tesis compara cinco modelos: OLS, GWR, Random Forest, GNNWR y SANNWR-adaptado, llamado así porque fija en 0,5/0,5 la combinación de distancias que el diseño original aprende. El directorio `modelos/` contiene además las variantes que el trabajo ejecutó y que los anexos documentan o que la consolidación de `analisis/analisis_log.py` sigue leyendo: MLP, GSAWR, GWR sobre 17 variables y la variante de SANNWR con grilla de referencia. Se conservan para que el análisis sea ejecutable de extremo a extremo y para dejar constancia de lo que se probó, no porque el documento las reporte.
 
 El SANNWR canónico es `modelos/sannwr/sannwr_real_log.py`, con sus réplicas en `sannwr_real_log_replicas.py` y `sannwr_real_log_cv_replicas.py`. Los archivos `sannwr_log*.py` corresponden a la variante con grilla.
 

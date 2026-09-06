@@ -9,8 +9,8 @@ Comparar modelos de predicción del precio de oferta del suelo urbano bajo inter
 - OLS: referencia lineal global.
 - GWR: regresión local con ancho de banda seleccionado dentro de cada partición e intercepto no penalizado.
 - Random Forest: control tabular no espacial fuerte.
-- GNNWR: red que aprende pesos a partir de la proximidad geográfica.
-- SANNWR: ponderación neuronal espacial y atributiva con `alpha=0.5`.
+- GNNWR: red que aprende pesos a partir de la proximidad geográfica. Es una reimplementación basada en Du et al. (2020); realiza la operación que define a GNNWR, pero no reproduce numéricamente el paquete de sus autores.
+- SANNWR-adaptado: ponderación neuronal espacial y atributiva con `alpha=0.5` fijo. El diseño de Ni et al. (2022) aprende esa combinación en vez de fijarla; lo evaluado aquí es la variante simplificada, y ninguna cifra valida la arquitectura publicada.
 
 ## Usos previstos
 
@@ -34,6 +34,7 @@ Comparar modelos de predicción del precio de oferta del suelo urbano bajo inter
 - Autocorrelación residual significativa en los cinco modelos.
 - Tendencia a subestimar sectores de mayor valor.
 - El conjunto de prueba fue reutilizado durante el desarrollo y se interpreta como evidencia descriptiva interna.
+- Las dos arquitecturas neuronales son implementaciones propias, una reimplementación y una adaptación, de modo que los resultados describen estas implementaciones concretas y no validan las publicadas.
 
 ## Revisión humana
 
