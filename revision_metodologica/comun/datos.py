@@ -1,8 +1,8 @@
 """
 datos.py -- carga canonica del conjunto y utilidades de imputacion.
 
-Replica EXACTAMENTE las convenciones del repositorio (contratos criticos del
-CLAUDE.md): capa puntos_mercado, CRS EPSG:32717, clave predio_join casteada a
+Replica EXACTAMENTE las convenciones del repositorio (los contratos criticos
+que fija REPRODUCIBILITY.md): capa puntos_mercado, CRS EPSG:32717, clave predio_join casteada a
 int en ambos lados de todo merge, orden determinista por predio_join, y matriz
 de covariables construida por modelos/features.build_feature_matrix (one-hot de
 uso_suelo_cod, 30 columnas).

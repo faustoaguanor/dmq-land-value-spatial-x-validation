@@ -6,7 +6,8 @@ independientes (aplicada y de codigo/resultados) senalaron que esto es una asime
 los modelos neurales, que reportan media +/- sigma sobre 10 semillas. Este script cierra esa
 brecha SIN reentrenar redes: repite exactamente el mismo protocolo de baselines_tabulares.py
 (mismas 27 covariables one-hot, mismos splits/folds, smearing fold-especifico, 4 esquemas)
-variando unicamente random_state sobre las 10 semillas canonicas del proyecto (ver CLAUDE.md).
+variando unicamente random_state sobre las 10 semillas canonicas del proyecto
+(las que declara REPRODUCIBILITY.md y lista la constante SEEDS de este archivo).
 
 No sobrescribe outputs de baselines_tabulares.py (run base seed=42 se mantiene como referencia
 principal); escribe a output_log_replicas/.
@@ -30,7 +31,7 @@ sys.path.insert(0, str(ROOT / "modelos"))
 from estrategias_cv import RandomKFoldCV, SpatialBlockCV, SpatialBlockBufferedCV
 from features import build_feature_matrix
 
-SEEDS = [42, 2011, 456, 777, 2026, 99, 1234, 888, 314, 7]  # canonicas, ver CLAUDE.md
+SEEDS = [42, 2011, 456, 777, 2026, 99, 1234, 888, 314, 7]  # canonicas del proyecto
 BUFFER_M = 2530
 OUT = Path(__file__).parent / "output_log_replicas"; OUT.mkdir(parents=True, exist_ok=True)
 
