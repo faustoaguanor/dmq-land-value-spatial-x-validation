@@ -301,7 +301,7 @@ def fig_d1_area_estudio(gdf: gpd.GeoDataFrame, parroquias=None, dmq_union=None):
     cbar.outline.set_edgecolor(MAP_FRAME)
     cbar.outline.set_linewidth(0.7)
 
-    ax.set_title("Área de estudio: 5,051 predios en el Distrito Metropolitano de Quito",
+    ax.set_title("Área de estudio: 5051 predios en el Distrito Metropolitano de Quito",
                   fontsize=12.5, fontweight="bold", color=MAP_FRAME, pad=12)
     ax.set_aspect("equal")
 
@@ -317,7 +317,7 @@ def fig_d1_area_estudio(gdf: gpd.GeoDataFrame, parroquias=None, dmq_union=None):
     add_north_arrow(ax)
 
     fig.text(0.5, 0.005,
-              f"Elaboración propia (n=5,051 predios, EPSG:32717). Límites de parroquias del DMQ como referencia "
+              f"Elaboración propia (n=5051 predios, EPSG:32717). Límites de parroquias del DMQ como referencia "
               f"geográfica. El encuadre\nprioriza la zona muestreada: {fuera} predios dispersos en el extremo norte y "
               f"sur quedan fuera del recuadro, y el territorio\ncontinúa más allá de él.",
               ha="center", fontsize=7.5, color="#666666", style="italic")
@@ -362,13 +362,13 @@ def fig_d2_leakage_esquema():
         ax.plot([focus[0], p[0]], [focus[1], p[1]], color="black", lw=1.2,
                 linestyle=":", zorder=4)
     # Anotacion LOCAL: offset en puntos desde el foco -> flecha corta, no cruza la figura.
-    ax.annotate("El punto de prueba tiene\nvecinos de entrenamiento\na muy corta distancia\n→ fuga de información",
+    ax.annotate("El punto de prueba tiene\nvecinos de entrenamiento\na muy corta distancia:\nfuga de información",
                 xy=focus, xytext=(38, 40), textcoords="offset points",
                 fontsize=8.5, color="#222", ha="left", va="bottom", bbox=note_bbox,
                 arrowprops=dict(arrowstyle="->", color="#333", lw=1.0,
                                 connectionstyle="arc3,rad=0.15"))
 
-    ax.set_title("(a) Partición aleatoria (RandomKFold)", fontsize=11, fontweight="bold")
+    ax.set_title("(a) Reparto aleatorio", fontsize=11, fontweight="bold")
     ax.legend(loc="lower right", frameon=False, fontsize=8.5)
     ax.set_xlim(-0.4, 10.4); ax.set_ylim(-0.4, 10.4)
     ax.set_xticks([]); ax.set_yticks([])
@@ -404,13 +404,13 @@ def fig_d2_leakage_esquema():
     for p in nearest3b:
         ax.plot([focus2[0], p[0]], [focus2[1], p[1]], color="black", lw=1.2,
                 linestyle=":", zorder=4)
-    ax.annotate("Sus vecinos de\nentrenamiento quedan\nen otro bloque\n→ separación geográfica",
+    ax.annotate("Sus vecinos de\nentrenamiento quedan\nen otro bloque:\nseparación geográfica",
                 xy=focus2, xytext=(30, -70), textcoords="offset points",
                 fontsize=8.5, color="#222", ha="left", va="top", bbox=note_bbox,
                 arrowprops=dict(arrowstyle="->", color="#333", lw=1.0,
                                 connectionstyle="arc3,rad=-0.15"))
 
-    ax.set_title("(b) Partición por bloques (SpatialBlock)", fontsize=11, fontweight="bold")
+    ax.set_title("(b) Reparto por bloques espaciales", fontsize=11, fontweight="bold")
     ax.legend(loc="lower right", frameon=False, fontsize=8.5)
     ax.set_xlim(-0.4, 10.4); ax.set_ylim(-0.4, 10.4)
     ax.set_xticks([]); ax.set_yticks([])
