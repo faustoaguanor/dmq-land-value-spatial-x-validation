@@ -34,6 +34,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.inspection import PartialDependenceDisplay
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "modelos"))
+from features import build_feature_matrix  # noqa: E402
 OUT = Path(__file__).parent
 
 plt.rcParams.update({
@@ -66,13 +68,20 @@ def main():
     split = pd.read_csv(ROOT / "data_split" / "split.csv")
     split["predio_join"] = split["predio_join"].astype(int)
     df = gdf.merge(split[["predio_join", "split"]], on="predio_join", how="inner")
+    # Orden determinista: Random Forest remuestrea por posicion, de modo que sin
+    # esto el bosque no es el mismo que el del cuerpo. Con el sort, el RMSE de
+    # prueba reproduce 76,99 exacto.
+    df = df.sort_values("predio_join").reset_index(drop=True)
 
-    # Mismo vector de entrada que el modelo del cuerpo: 27 variables, sin
-    # coordenadas, con la categorica de uso de suelo en columnas binarias.
-    excl = {"predio_join", "valor_m2", "split", "geometry"}
-    num = [c for c in df.columns
-           if c not in excl and pd.api.types.is_numeric_dtype(df[c])]
-    X = pd.get_dummies(df[num].copy(), drop_first=False)
+    # Mismo vector de entrada que el modelo del cuerpo, por el constructor
+    # canonico. Seleccionar "todas las columnas numericas menos cuatro" y pasar
+    # get_dummies no equivale: uso_suelo_cod ya es numerica, de modo que
+    # get_dummies la dejaba intacta y el bosque la leia como un ordinal en vez
+    # de como categorias, sin colapsar ademas las raras en "otros". Salian 27
+    # columnas donde el modelo comparado usa 30, asi que la figura explicaba
+    # otro bosque. Corregido el 2026-09-19.
+    X_arr, nombres_X = build_feature_matrix(df)
+    X = pd.DataFrame(X_arr, columns=nombres_X)
     y = np.log(df["valor_m2"].values)
 
     tr = (df["split"] == "train").values

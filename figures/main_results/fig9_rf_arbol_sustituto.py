@@ -22,6 +22,7 @@ Salida: figures/main_results/fig9_rf_arbol.{png,pdf}
 """
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -35,6 +36,8 @@ from sklearn.tree import DecisionTreeRegressor, plot_tree
 from sklearn.metrics import r2_score
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "modelos"))
+from features import build_feature_matrix  # noqa: E402
 OUT = Path(__file__).parent
 
 plt.rcParams.update({"font.family": "serif", "figure.dpi": 150})
@@ -93,11 +96,16 @@ def main():
     split = pd.read_csv(ROOT / "data_split" / "split.csv")
     split["predio_join"] = split["predio_join"].astype(int)
     df = gdf.merge(split[["predio_join", "split"]], on="predio_join", how="inner")
+    # Orden determinista: Random Forest remuestrea por posicion, de modo que sin
+    # esto el bosque no es el mismo que el del cuerpo. Con el sort, el RMSE de
+    # prueba reproduce 76,99 exacto.
+    df = df.sort_values("predio_join").reset_index(drop=True)
 
-    excl = {"predio_join", "valor_m2", "split", "geometry"}
-    num = [c for c in df.columns
-           if c not in excl and pd.api.types.is_numeric_dtype(df[c])]
-    X = pd.get_dummies(df[num].copy(), drop_first=False)
+    # Constructor canonico: ver la nota en fig8_rf_dependencia_parcial.py.
+    # La seleccion por dtype dejaba uso_suelo_cod como ordinal y daba 27
+    # columnas donde el modelo comparado usa 30. Corregido el 2026-09-19.
+    X_arr, nombres_X = build_feature_matrix(df)
+    X = pd.DataFrame(X_arr, columns=nombres_X)
     y = np.log(df["valor_m2"].values)
     tr = (df["split"] == "train").values
 

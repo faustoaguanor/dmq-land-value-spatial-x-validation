@@ -144,6 +144,9 @@ split_df=pd.read_csv(SPLIT_PATH); split_df["predio_join"]=split_df["predio_join"
 folds_df=pd.read_csv(FOLDS_PATH); folds_df["predio_join"]=folds_df["predio_join"].astype(int)
 gdf=gdf.merge(folds_df[["predio_join","fold"]],on="predio_join",how="left")
 gdf=gdf.merge(split_df[["predio_join","split"]],on="predio_join",how="left")
+# Orden determinista: ver la nota en gnnwr_log.py. Sin el, los folds aleatorios
+# de GNNWR no coinciden con los de los demas modelos. Corregido el 2026-09-19.
+gdf=gdf.sort_values("predio_join").reset_index(drop=True)
 coords=np.column_stack([gdf.geometry.x,gdf.geometry.y])
 y_orig=gdf["valor_m2"].values.astype(float); y_log=np.log(y_orig)
 import sys as _s; from pathlib import Path as _P

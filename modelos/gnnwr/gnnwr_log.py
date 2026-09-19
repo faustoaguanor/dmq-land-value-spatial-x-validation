@@ -164,6 +164,12 @@ split_df = pd.read_csv(SPLIT_PATH); split_df["predio_join"]=split_df["predio_joi
 folds_df = pd.read_csv(FOLDS_PATH); folds_df["predio_join"]=folds_df["predio_join"].astype(int)
 gdf = gdf.merge(folds_df[["predio_join","fold"]], on="predio_join", how="left")
 gdf = gdf.merge(split_df[["predio_join","split"]], on="predio_join", how="left")
+# Orden determinista antes de partir. RandomKFoldCV baraja POSICIONES, no
+# identificadores: sin este sort los folds aleatorios de GNNWR contenian otros
+# predios que los del resto de modelos, que si ordenan. Los bloques espaciales
+# y el conjunto de prueba no se veian afectados porque su pertenencia viaja en
+# las columnas fold/split, unidas por predio_join. Corregido el 2026-09-19.
+gdf = gdf.sort_values("predio_join").reset_index(drop=True)
 
 coords = np.column_stack([gdf.geometry.x, gdf.geometry.y])
 y_orig = gdf["valor_m2"].values.astype(float)
