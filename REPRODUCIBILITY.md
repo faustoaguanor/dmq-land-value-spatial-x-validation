@@ -71,9 +71,19 @@ Los modelos predicen `log(valor_m2)`. Para volver a USD/m² se aplica el estimad
 y_hat_usd = exp(y_hat_log) * mean(exp(residual_train))
 ```
 
+## Agregación bajo bloques espaciales
+
+Los modelos neuronales y Random Forest son estocásticos, de modo que bajo bloques **el MAE de cada bloque se promedia entre semillas antes de cualquier contraste**. Las cifras por bloque salen de los `*_cv_replicas.csv`, no de los `*_log_results.csv`, que corresponden a la corrida base de semilla única. OLS y GWR son deterministas y sí se toman de su corrida base.
+
+La distinción importa: mezclarlas produce diferencias que no cuadran con las tablas del documento. `analisis/tost_equivalencia.py` leía la corrida base hasta el 19 de septiembre de 2026 y daba, por ejemplo, −3,09 USD/m² para GNNWR frente a SANNWR-adaptado donde la tabla de resultados por bloques da −1,5.
+
+La dispersión que acompaña a esas medias es la que hay **entre bloques**, no entre semillas: las cinco regiones son la unidad de evaluación, y las semillas son pseudorréplicas sobre la misma geografía.
+
 ## Resultados esperados
 
 Las tablas de referencia están en `results/*.csv`. Los archivos de `results/raw/` conservan métricas agregadas de las ejecuciones, nunca predicciones individuales.
+
+`analisis/concordancia_predio_a_predio.py` es la excepción parcial: compara las predicciones de dos modelos entre sí, predicción a predicción, para medir cuánto discrepan en la misma parcela dos modelos de error medio casi idéntico. Requiere los archivos de predicciones, que no se publican.
 
 ## Validación sin datos
 
