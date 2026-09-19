@@ -116,11 +116,31 @@ hold = pd.DataFrame(rows).sort_values("delta_min_espacial").reset_index(drop=Tru
 hold.to_csv(OUT / "tost_equivalencia_holdout.csv", index=False)
 
 # ---------------- (B) SpatialBlock: folds como unidad ----------------
+# El MAE por bloque se toma de las replicas multi-semilla y se promedia entre
+# semillas dentro de cada bloque, que es exactamente lo que tabula el capitulo 5.
+# Leer aqui la corrida base de semilla unica daba cifras que no cuadraban con esa
+# tabla (GNNWR-SANNWR salia -3,09 en vez de -1,5); corregido el 2026-09-19.
+REPLICAS = {
+    "GNNWR":  ("modelos/gnnwr/output_log/gnnwr_log_cv_replicas.csv", None, None),
+    "SANNWR": ("modelos/sannwr/output_log_real/sannwr_real_log_cv_replicas.csv", None, None),
+    "RF":     ("modelos/baselines/output_log_replicas/baseline_replicas_fold.csv", "modelo", "RF"),
+    "MLP":    ("modelos/mlp/output_log/mlp_log_cv_replicas.csv", None, None),
+}
+
 fold_mae = {}
 for name, (_, _, res_f) in MODELOS.items():
-    df = pd.read_csv(ROOT / res_f)
-    sb = df[df["estrategia"] == "SpatialBlock"].sort_values("fold")
-    fold_mae[name] = sb["MAE"].values.astype(float)
+    if name in REPLICAS:
+        path, col, val = REPLICAS[name]
+        df = pd.read_csv(ROOT / path)
+        if col:
+            df = df[df[col] == val]
+        sb = df[df["estrategia"] == "SpatialBlock"]
+        fold_mae[name] = sb.groupby("fold")["MAE"].mean().sort_index().values.astype(float)
+    else:
+        # OLS y GWR son deterministas: su corrida base ya es el valor definitivo.
+        df = pd.read_csv(ROOT / res_f)
+        sb = df[df["estrategia"] == "SpatialBlock"].sort_values("fold")
+        fold_mae[name] = sb["MAE"].values.astype(float)
 
 rows_b = []
 for a, b in combinations(MODELOS.keys(), 2):
