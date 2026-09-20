@@ -80,7 +80,7 @@ def run(cfg=None) -> gpd.GeoDataFrame:
     # ── 3.4 Imputar + validar ─────────────────────────────────────────────────
     if n_sin > 0:
         mediana = result["pc_pnbi"].median()
-        result["pc_pnbi"].fillna(mediana, inplace=True)
+        result["pc_pnbi"] = result["pc_pnbi"].fillna(mediana)
         log(f"  Imputado con mediana: {mediana:.2f}%")
 
     assert len(result) == n_puntos, "ERROR: se perdieron puntos"

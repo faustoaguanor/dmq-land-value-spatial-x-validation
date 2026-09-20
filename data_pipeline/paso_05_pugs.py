@@ -92,7 +92,7 @@ def run(cfg=None) -> gpd.GeoDataFrame:
     result["uso_suelo_cod"] = result["cod_uso_gr"].map(cfg.MAPA_USO_SUELO)
     if result["uso_suelo_cod"].isna().any():
         moda = result["uso_suelo_cod"].mode()[0]
-        result["uso_suelo_cod"].fillna(moda, inplace=True)
+        result["uso_suelo_cod"] = result["uso_suelo_cod"].fillna(moda)
 
     # ── 5.5 Procesar cos_num ─────────────────────────────────────────────────
     result["cos_num"] = result["cos_pb_ba"].apply(_normalizar_cos)

@@ -71,8 +71,8 @@ def run(cfg=None) -> gpd.GeoDataFrame:
     if n_sin > 0:
         moda = result["suscept_codigo"].mode()[0]
         moda_clase = result["suscept_clase"].mode()[0]
-        result["suscept_codigo"].fillna(moda, inplace=True)
-        result["suscept_clase"].fillna(moda_clase, inplace=True)
+        result["suscept_codigo"] = result["suscept_codigo"].fillna(moda)
+        result["suscept_clase"] = result["suscept_clase"].fillna(moda_clase)
         log(f"  Imputado con moda: {moda_clase} (código {moda})")
 
     assert len(result) == n_puntos, "ERROR: se perdieron puntos en el join"
