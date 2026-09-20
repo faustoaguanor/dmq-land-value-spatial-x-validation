@@ -36,8 +36,8 @@ Métricas en USD/m², generadas por `analisis/cifras_canonicas.py`, que es la fu
 Hallazgos:
 
 - Random Forest domina la interpolación, sin usar coordenadas.
-- Al pasar del conjunto de prueba a la validación por bloques espaciales, su RMSE aumenta 41.3 % y cae al tercer puesto compartido.
-- GNNWR encabeza la validación por bloques espaciales y es el único modelo competitivo que no se degrada respecto del conjunto de prueba.
+- Al pasar del conjunto de prueba a la validación por bloques espaciales, su RMSE aumenta 41.7 % y cae al cuarto puesto. Comparando entre sí las dos validaciones cruzadas, que es la comparación homogénea, el aumento es 34.4 %.
+- GNNWR encabeza la validación por bloques espaciales y es, junto con SANNWR-adaptado, el que menos error relativo gana al pasar de la validación cruzada aleatoria a la espacial (7.7 % y 6.7 % respectivamente, frente al 34.4 % de Random Forest).
 - Con solo cinco regiones, la ventaja de GNNWR/SANNWR-adaptado frente a Random Forest no alcanza significancia robusta: se reporta como tendencia, no como superioridad establecida.
 - Ningún modelo elimina la autocorrelación residual.
 

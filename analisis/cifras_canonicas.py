@@ -138,6 +138,28 @@ def cv(estrategia):
     return filas
 
 
+def moran():
+    """Indice de Moran sobre los residuos del conjunto de prueba, los 5 del documento.
+
+    La fuente base (moran_holdout_significancia.csv) es la corrida de semilla
+    unica: correcta para los deterministas, pero para GNNWR es la misma
+    semilla 42 atipica que en el resto de metricas. Se sustituye por la media
+    de las diez replicas (0,089 en vez del 0,097 de esa corrida).
+    """
+    BASE_MORAN = "analisis/output_log/moran_holdout_significancia.csv"
+    ETIQUETA = {"OLS": "OLS", "GWR-27": "GWR", "SANNWR": "SANNWR-adaptado", "RF": "Random Forest"}
+    d = pd.read_csv(_ruta(BASE_MORAN))
+    filas = {}
+    for fila, nombre in ETIQUETA.items():
+        r = d[d.modelo == fila].iloc[0]
+        filas[nombre] = {"I": round(float(r.I), 4), "p": float(r.p_sim), "fuente": BASE_MORAN}
+    rep = pd.read_csv(_ruta("modelos/gnnwr/output_log/gnnwr_log_replicas.csv"))
+    filas["GNNWR"] = {"I": round(float(rep.Moran_I_holdout.mean()), 4),
+                      "p": float(d[d.modelo == "GNNWR"].iloc[0].p_sim),
+                      "fuente": "modelos/gnnwr/output_log/gnnwr_log_replicas.csv (media de 10 semillas)"}
+    return filas
+
+
 def degradacion(a, b):
     """Cambio relativo de RMSE entre dos esquemas, comparando lo comparable."""
     return {m: round((b[m]["RMSE"] - a[m]["RMSE"]) / a[m]["RMSE"] * 100, 2)
@@ -159,7 +181,7 @@ def main():
     h, ale, esp = holdout(), cv("RandomKFold"), cv("SpatialBlock")
     datos = {"conjunto_de_prueba": h, "cv_aleatoria": ale, "cv_espacial": esp,
              "degradacion_cv_a_cv_pct": degradacion(ale, esp),
-             "equivalencia": equivalencia()}
+             "equivalencia": equivalencia(), "moran": moran()}
 
     if "--json" in sys.argv:
         print(json.dumps(datos, ensure_ascii=False, indent=2))

@@ -60,6 +60,13 @@ OUT = Path(__file__).parent
 ANL = ROOT / "analisis" / "output_log"
 MOD = ROOT / "modelos"
 
+import sys as _sys
+_sys.path.insert(0, str(ROOT / "analisis"))
+from cifras_canonicas import _ruta as _resolver  # noqa: E402
+# _resolver traduce una ruta del repositorio de trabajo (modelos/<m>/output_log)
+# a su equivalente publicado (results/raw/<m>) cuando la primera no existe, de
+# modo que este script corre igual en los dos repositorios.
+
 plt.rcParams.update({"font.family": "serif", "font.size": 11,
                      "figure.dpi": 150, "axes.axisbelow": True})
 
@@ -122,25 +129,6 @@ def g1_interpolacion():
 
 # ──────────────────── 2. reparto aleatorio frente a bloques ───────────────
 
-def _por_bloque():
-    """RMSE medio entre los cinco bloques, promediando antes las semillas."""
-    F = {"GNNWR": MOD / "gnnwr/output_log/gnnwr_log_cv_replicas.csv",
-         "SANNWR-adaptado": MOD / "sannwr/output_log_real/sannwr_real_log_cv_replicas.csv",
-         "Random Forest": MOD / "baselines/output_log_replicas/baseline_replicas_fold.csv",
-         "GWR": MOD / "gwr/output_log_27vars/gwr27_log_results.csv",
-         "OLS": MOD / "ols/output_log/ols_log_results.csv"}
-    fuera = {}
-    for nom, ruta in F.items():
-        d = pd.read_csv(ruta)
-        if "modelo" in d.columns and d.modelo.nunique() > 1:
-            d = d[d.modelo.str.contains("RF|Random", case=False, na=False)]
-        for est in ("RandomKFold", "SpatialBlock"):
-            s = d[d.estrategia == est]
-            if "seed" in s.columns:
-                s = s.groupby("fold", as_index=False)["RMSE"].mean()
-            fuera[(nom, est)] = s.RMSE.mean()
-    return fuera
-
 
 def _canonico():
     """Cifras del documento, tal como las emite analisis/cifras_canonicas.py.
@@ -171,22 +159,17 @@ def _dispersion_cv():
     Es la misma magnitud en ambos: cuanto cambia el error segun que parte de
     la muestra toque dejar fuera. Lo unico que difiere es como se forman esas
     partes, al azar o por zonas contiguas.
+
+    Se lee de _canonico() y no de los CSV de cada modelo por separado: esos
+    CSV viven en rutas del repositorio de trabajo (modelos/<m>/output_log) que
+    no existen en la copia publica, donde las mismas salidas se reunen bajo
+    results/raw/<m>. _canonico() ya resuelve esa diferencia.
     """
-    F = {"GNNWR": MOD / "gnnwr/output_log/gnnwr_log_cv_replicas.csv",
-         "SANNWR-adaptado": MOD / "sannwr/output_log_real/sannwr_real_log_cv_replicas.csv",
-         "Random Forest": MOD / "baselines/output_log_replicas/baseline_replicas_fold.csv",
-         "GWR": MOD / "gwr/output_log_27vars/gwr27_log_results.csv",
-         "OLS": MOD / "ols/output_log/ols_log_results.csv"}
+    canon = _canonico()
     fuera = {}
-    for nom, ruta in F.items():
-        d = pd.read_csv(ruta)
-        if "modelo" in d.columns and d.modelo.nunique() > 1:
-            d = d[d.modelo.str.contains("RF|Random", case=False, na=False)]
-        for est in ("RandomKFold", "SpatialBlock"):
-            s = d[d.estrategia == est]
-            if "seed" in s.columns:
-                s = s.groupby("fold", as_index=False)["RMSE"].mean()
-            fuera[(nom, est)] = (s.RMSE.mean(), s.RMSE.std())
+    for seccion, est in [("cv_aleatoria", "RandomKFold"), ("cv_espacial", "SpatialBlock")]:
+        for modelo, v in canon[seccion].items():
+            fuera[(modelo, est)] = (v["RMSE"], v["DE_RMSE"])
     return fuera
 
 
@@ -253,10 +236,10 @@ def g2_tres_esquemas():
 
 def g3_semillas():
     """Las diez ejecuciones de cada modelo estocastico, una por una."""
-    F = {"Random Forest": (MOD / "baselines/output_log_replicas"
-                                 "/baseline_replicas_holdout_fold.csv"),
-         "SANNWR-adaptado": MOD / "sannwr/output_log_real/sannwr_real_log_replicas.csv",
-         "GNNWR": MOD / "gnnwr/output_log/gnnwr_log_replicas.csv"}
+    F = {"Random Forest": _resolver("modelos/baselines/output_log_replicas"
+                                     "/baseline_replicas_holdout_fold.csv"),
+         "SANNWR-adaptado": _resolver("modelos/sannwr/output_log_real/sannwr_real_log_replicas.csv"),
+         "GNNWR": _resolver("modelos/gnnwr/output_log/gnnwr_log_replicas.csv")}
 
     fig, ax = plt.subplots(figsize=(9.2, 3.4))
     for i, (nom, ruta) in enumerate(F.items()):
@@ -290,11 +273,15 @@ def g3_semillas():
 
 def g4_moran():
     """Indice de Moran sobre los residuos, con la referencia de ausencia de
-    autocorrelacion marcada en el cero."""
-    # Este archivo si trae los cinco modelos, incluido Random Forest.
-    d = pd.read_csv(ANL / "moran_holdout_significancia.csv")
-    d["modelo"] = d.modelo.replace(ALIAS)
-    d = d[d.modelo.isin(COLOR)].sort_values("I")
+    autocorrelacion marcada en el cero.
+
+    Antes leia moran_holdout_significancia.csv directamente: correcto para
+    los cuatro deterministas o casi, pero para GNNWR es la corrida de semilla
+    unica (0,097), no la media de diez que usan el documento y la tabla
+    publica (0,089). Se lee de _canonico(), que ya hace esa correccion.
+    """
+    canon = _canonico()["moran"]
+    d = pd.DataFrame([{"modelo": m, "I": v["I"]} for m, v in canon.items()]).sort_values("I")
     faltan = set(COLOR) - set(d.modelo)
     assert not faltan, f"faltan modelos en la figura: {faltan}"
     col, nombre = "I", "modelo"
