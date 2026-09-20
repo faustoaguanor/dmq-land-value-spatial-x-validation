@@ -56,8 +56,35 @@ DETERMINISTAS_CV = {
 METRICAS = ["RMSE", "MAE", "R2", "MAPE"]
 
 
+# El repositorio de trabajo guarda cada salida junto a su modelo
+# (modelos/<m>/output_log/) y el publicado las reune en results/raw/<m>/. Se
+# aceptan las dos disposiciones para que el guion corra en ambos sin editarlo.
+ALTERNATIVAS = {
+    "modelos/gnnwr/output_log": "results/raw/gnnwr",
+    "modelos/sannwr/output_log_real": "results/raw/sannwr",
+    "modelos/gwr/output_log_27vars": "results/raw/gwr",
+    "modelos/ols/output_log": "results/raw/ols",
+    "modelos/baselines/output_log_replicas": "results/raw/random_forest",
+    "analisis/output_log": "results/raw/analysis",
+}
+
+
+def _ruta(rel):
+    p = ROOT / rel
+    if p.exists():
+        return p
+    for viejo, nuevo in ALTERNATIVAS.items():
+        if rel.startswith(viejo):
+            alt = ROOT / rel.replace(viejo, nuevo, 1)
+            if alt.exists():
+                return alt
+    raise FileNotFoundError(
+        "No se hallo %s ni su equivalente en results/raw/. Este guion corre "
+        "tanto en el repositorio de trabajo como en el publicado." % rel)
+
+
 def _leer(rel, col=None, val=None):
-    d = pd.read_csv(ROOT / rel)
+    d = pd.read_csv(_ruta(rel))
     if col:
         d = d[d[col] == val]
     return d
@@ -69,9 +96,8 @@ def holdout():
     for m, (rel, col, val, smear) in REPLICAS_HOLDOUT.items():
         d = _leer(rel, col, val)
         filas[m] = {k: round(float(d[k].mean()), 4) for k in METRICAS}
+        filas[m].update({"DE_" + k: round(float(d[k].std()), 4) for k in METRICAS})
         filas[m].update(n_replicas=len(d),
-                        DE_RMSE=round(float(d["RMSE"].std()), 4),
-                        DE_MAE=round(float(d["MAE"].std()), 4),
                         fuente=rel, agregacion="media de replicas",
                         smearing="si" if smear else "no, exponencial directa")
     comp = _leer(SMEARED)
@@ -95,9 +121,8 @@ def cv(estrategia):
         d = d[d["estrategia"] == estrategia]
         por_bloque = d.groupby("fold")[METRICAS].mean()
         filas[m] = {k: round(float(por_bloque[k].mean()), 4) for k in METRICAS}
-        filas[m].update(DE_RMSE=round(float(por_bloque["RMSE"].std()), 4),
-                        DE_MAE=round(float(por_bloque["MAE"].std()), 4),
-                        peor_bloque_RMSE=round(float(por_bloque["RMSE"].max()), 4),
+        filas[m].update({"DE_" + k: round(float(por_bloque[k].std()), 4) for k in METRICAS})
+        filas[m].update(peor_bloque_RMSE=round(float(por_bloque["RMSE"].max()), 4),
                         n_semillas=int(d["seed"].nunique()), n_bloques=len(por_bloque),
                         fuente=rel, agregacion="media entre semillas por bloque, luego entre bloques",
                         smearing="si, por bloque")
@@ -105,9 +130,8 @@ def cv(estrategia):
         d = _leer(rel)
         d = d[d["estrategia"] == estrategia]
         filas[m] = {k: round(float(d[k].mean()), 4) for k in METRICAS if k in d.columns}
-        filas[m].update(DE_RMSE=round(float(d["RMSE"].std()), 4),
-                        DE_MAE=round(float(d["MAE"].std()), 4),
-                        peor_bloque_RMSE=round(float(d["RMSE"].max()), 4),
+        filas[m].update({"DE_" + k: round(float(d[k].std()), 4) for k in METRICAS if k in d.columns})
+        filas[m].update(peor_bloque_RMSE=round(float(d["RMSE"].max()), 4),
                         n_semillas=1, n_bloques=len(d), fuente=rel,
                         agregacion="media no ponderada de los cinco bloques",
                         smearing="si, por bloque")
@@ -124,7 +148,7 @@ def equivalencia():
     d = {}
     for nom, rel in [("conjunto de prueba", "analisis/output_log/tost_equivalencia_holdout.csv"),
                      ("bloques espaciales", "analisis/output_log/tost_equivalencia_spatialblock.csv")]:
-        t = pd.read_csv(ROOT / rel)
+        t = pd.read_csv(_ruta(rel))
         doc = {"OLS", "GWR", "GNNWR", "SANNWR", "RF"}
         t = t[t.modelo_A.isin(doc) & t.modelo_B.isin(doc)]
         d[nom] = t.to_dict("records")

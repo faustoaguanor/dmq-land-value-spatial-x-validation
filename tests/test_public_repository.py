@@ -41,8 +41,12 @@ class PublicRepositoryContracts(unittest.TestCase):
     def test_conjunto_prueba_ranking_matches_thesis(self):
         with (ROOT / "results" / "conjunto_prueba.csv").open(encoding="utf-8", newline="") as handle:
             rows = list(csv.DictReader(handle))
-        self.assertEqual([row["model"] for row in rows], ["Random Forest", "SANNWR", "GWR", "GNNWR", "OLS"])
-        self.assertAlmostEqual(float(rows[0]["rmse"]), 76.99)
+        # El orden cambio al pasar los modelos estocasticos a la media de sus
+        # diez replicas: GNNWR queda en 97,89 y adelanta a GWR, que esta en
+        # 98,15. Los separan 0,26, dentro de la variacion de GNNWR entre
+        # semillas, de modo que el documento los declara indistinguibles.
+        self.assertEqual([row["model"] for row in rows], ["Random Forest", "SANNWR", "GNNWR", "GWR", "OLS"])
+        self.assertAlmostEqual(float(rows[0]["rmse"]), 76.75)
         self.assertAlmostEqual(float(rows[-1]["rmse"]), 139.01)
 
     def test_validation_figure_reports_both_cross_validation_deviations(self):
