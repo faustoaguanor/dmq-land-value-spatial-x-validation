@@ -2,7 +2,7 @@
 
 [![Quality checks](https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/actions/workflows/quality.yml/badge.svg)](https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/actions/workflows/quality.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 
 Código y resultados agregados de la tesis:
 
@@ -23,13 +23,13 @@ El repositorio compara cinco modelos (OLS, GWR, Random Forest, GNNWR y SANNWR-ad
 
 | Modelo | Conjunto de prueba RMSE | Validación cruzada aleatoria RMSE | Validación por bloques espaciales RMSE |
 |---|---:|---:|---:|
-| Random Forest | **76.99** | **80.9 ± 3.3** | 108.8 ± 60.4 |
-| SANNWR-adaptado | 92.70 | 93.5 ± 5.4 | 98.7 ± 50.6 |
+| Random Forest | **76.75** | **80.9 ± 3.4** | 108.8 ± 60.4 |
+| SANNWR-adaptado | 92.64 | 92.5 ± 4.6 | 98.7 ± 50.6 |
+| GNNWR | 97.89 | 90.1 ± 6.9 | **97.0 ± 52.0** |
 | GWR | 98.15 | 97.2 ± 8.0 | 108.5 ± 58.3 |
-| GNNWR | 98.76 | 91.4 ± 21.8 | **98.5 ± 53.1** |
 | OLS | 139.01 | 141.7 ± 7.5 | 135.8 ± 74.1 |
 
-Métricas en USD/m². El conjunto de prueba usa retransformación con *smearing* de Duan. En la validación por bloques espaciales, la dispersión corresponde a los cinco bloques territoriales; no debe confundirse con la variación entre semillas.
+Métricas en USD/m², generadas por `analisis/cifras_canonicas.py`, que es la fuente única de estas cifras. En el conjunto de prueba, los tres modelos estocásticos (Random Forest, SANNWR-adaptado y GNNWR) aportan la media de diez réplicas y los deterministas (GWR, OLS) su única ejecución con *smearing* de Duan. En la validación por bloques espaciales, la dispersión corresponde a los cinco bloques territoriales; no debe confundirse con la variación entre semillas.
 
 **SANNWR-adaptado** designa lo que este repositorio entrena y mide: la propuesta de Ni et al. (2022) con la combinación de distancia espacial y de atributos fijada en 0,5/0,5 en vez de aprendida. Ninguna cifra de aquí valida la arquitectura publicada, que no se implementó como modelo principal. En los CSV y en el código la columna conserva el nombre corto `SANNWR`.
 
@@ -80,7 +80,7 @@ Consulta [`DATA_AVAILABILITY.md`](DATA_AVAILABILITY.md) para conocer las fuentes
 
 ## Instalación
 
-Se recomienda Python 3.11 y un entorno aislado:
+Se recomienda Python 3.12.10 y un entorno aislado:
 
 ```bash
 python -m venv .venv

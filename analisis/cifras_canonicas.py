@@ -1,0 +1,164 @@
+"""Fuente unica de las cifras que publica la tesis.
+
+El problema que este archivo resuelve: hasta ahora cada tabla del documento se
+actualizaba a mano desde el CSV que pareciera pertinente, y convivian en el
+mismo cuadro resultados de una corrida y promedios de diez. Aqui se declara, de
+una vez, de donde sale cada numero y con que regla se agrega.
+
+    python analisis/cifras_canonicas.py            # imprime el informe
+    python analisis/cifras_canonicas.py --json      # lo emite como JSON
+
+Convenciones adoptadas, que el documento debe respetar:
+
+  Conjunto de prueba .... media de las replicas para los modelos estocasticos
+                          (GNNWR, SANNWR-adaptado, Random Forest) y corrida
+                          unica para los deterministas (OLS, GWR).
+  Validacion cruzada .... media entre semillas dentro de cada bloque, y luego
+                          media no ponderada de los cinco bloques.
+  Retransformacion ...... declarada por experimento, porque NO es homogenea:
+                          las replicas de holdout de GNNWR y SANNWR usan la
+                          exponencial directa y solo Random Forest aplica el
+                          factor de Duan.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+
+# modelo -> (ruta, filtro de columna, valor, aplica smearing en esa ruta)
+REPLICAS_HOLDOUT = {
+    "GNNWR": ("modelos/gnnwr/output_log/gnnwr_log_replicas.csv", None, None, False),
+    "SANNWR-adaptado": ("modelos/sannwr/output_log_real/sannwr_real_log_replicas.csv", None, None, False),
+    "Random Forest": ("modelos/baselines/output_log_replicas/baseline_replicas_holdout_fold.csv", "modelo", "RF", True),
+}
+
+# Los deterministas se toman del comparativo con smearing aplicado, no del
+# holdout crudo de cada modelo, que retransforma con exp() a secas.
+SMEARED = "analisis/output_log/comparativo_holdout_smeared.csv"
+DETERMINISTAS_HOLDOUT = {"GWR": "GWR-27", "OLS": "OLS"}
+
+REPLICAS_CV = {
+    "GNNWR": ("modelos/gnnwr/output_log/gnnwr_log_cv_replicas.csv", None, None),
+    "SANNWR-adaptado": ("modelos/sannwr/output_log_real/sannwr_real_log_cv_replicas.csv", None, None),
+    "Random Forest": ("modelos/baselines/output_log_replicas/baseline_replicas_fold.csv", "modelo", "RF"),
+}
+
+DETERMINISTAS_CV = {
+    "GWR": "modelos/gwr/output_log_27vars/gwr27_log_results.csv",
+    "OLS": "modelos/ols/output_log/ols_log_results.csv",
+}
+
+METRICAS = ["RMSE", "MAE", "R2", "MAPE"]
+
+
+def _leer(rel, col=None, val=None):
+    d = pd.read_csv(ROOT / rel)
+    if col:
+        d = d[d[col] == val]
+    return d
+
+
+def holdout():
+    """Conjunto de prueba: media de replicas (estocasticos) o corrida (deterministas)."""
+    filas = {}
+    for m, (rel, col, val, smear) in REPLICAS_HOLDOUT.items():
+        d = _leer(rel, col, val)
+        filas[m] = {k: round(float(d[k].mean()), 4) for k in METRICAS}
+        filas[m].update(n_replicas=len(d),
+                        DE_RMSE=round(float(d["RMSE"].std()), 4),
+                        DE_MAE=round(float(d["MAE"].std()), 4),
+                        fuente=rel, agregacion="media de replicas",
+                        smearing="si" if smear else "no, exponencial directa")
+    comp = _leer(SMEARED)
+    for m, etiqueta in DETERMINISTAS_HOLDOUT.items():
+        r = comp[comp["modelo"] == etiqueta].iloc[0]
+        filas[m] = {"RMSE": round(float(r["RMSE_smeared"]), 4),
+                    "MAE": round(float(r["MAE_smeared"]), 4),
+                    "R2": round(float(r["R2_smeared"]), 4),
+                    "MAPE": round(float(r["MAPE_smeared"]), 4)}
+        filas[m].update(n_replicas=1, fuente=SMEARED,
+                        agregacion="corrida unica (modelo determinista)",
+                        smearing="si, factor %.6f" % float(r["smearing_factor"]))
+    return filas
+
+
+def cv(estrategia):
+    """Validacion cruzada: promedia semillas dentro del bloque y luego los cinco."""
+    filas = {}
+    for m, (rel, col, val) in REPLICAS_CV.items():
+        d = _leer(rel, col, val)
+        d = d[d["estrategia"] == estrategia]
+        por_bloque = d.groupby("fold")[METRICAS].mean()
+        filas[m] = {k: round(float(por_bloque[k].mean()), 4) for k in METRICAS}
+        filas[m].update(DE_RMSE=round(float(por_bloque["RMSE"].std()), 4),
+                        DE_MAE=round(float(por_bloque["MAE"].std()), 4),
+                        peor_bloque_RMSE=round(float(por_bloque["RMSE"].max()), 4),
+                        n_semillas=int(d["seed"].nunique()), n_bloques=len(por_bloque),
+                        fuente=rel, agregacion="media entre semillas por bloque, luego entre bloques",
+                        smearing="si, por bloque")
+    for m, rel in DETERMINISTAS_CV.items():
+        d = _leer(rel)
+        d = d[d["estrategia"] == estrategia]
+        filas[m] = {k: round(float(d[k].mean()), 4) for k in METRICAS if k in d.columns}
+        filas[m].update(DE_RMSE=round(float(d["RMSE"].std()), 4),
+                        DE_MAE=round(float(d["MAE"].std()), 4),
+                        peor_bloque_RMSE=round(float(d["RMSE"].max()), 4),
+                        n_semillas=1, n_bloques=len(d), fuente=rel,
+                        agregacion="media no ponderada de los cinco bloques",
+                        smearing="si, por bloque")
+    return filas
+
+
+def degradacion(a, b):
+    """Cambio relativo de RMSE entre dos esquemas, comparando lo comparable."""
+    return {m: round((b[m]["RMSE"] - a[m]["RMSE"]) / a[m]["RMSE"] * 100, 2)
+            for m in a if m in b}
+
+
+def equivalencia():
+    d = {}
+    for nom, rel in [("conjunto de prueba", "analisis/output_log/tost_equivalencia_holdout.csv"),
+                     ("bloques espaciales", "analisis/output_log/tost_equivalencia_spatialblock.csv")]:
+        t = pd.read_csv(ROOT / rel)
+        doc = {"OLS", "GWR", "GNNWR", "SANNWR", "RF"}
+        t = t[t.modelo_A.isin(doc) & t.modelo_B.isin(doc)]
+        d[nom] = t.to_dict("records")
+    return d
+
+
+def main():
+    h, ale, esp = holdout(), cv("RandomKFold"), cv("SpatialBlock")
+    datos = {"conjunto_de_prueba": h, "cv_aleatoria": ale, "cv_espacial": esp,
+             "degradacion_cv_a_cv_pct": degradacion(ale, esp),
+             "equivalencia": equivalencia()}
+
+    if "--json" in sys.argv:
+        print(json.dumps(datos, ensure_ascii=False, indent=2))
+        return
+
+    for titulo, tabla in [("CONJUNTO DE PRUEBA", h),
+                          ("VALIDACION CRUZADA ALEATORIA", ale),
+                          ("VALIDACION POR BLOQUES ESPACIALES", esp)]:
+        print("\n" + "=" * 78)
+        print(titulo)
+        print("%-17s %8s %8s %7s %7s  %s" % ("modelo", "RMSE", "MAE", "R2", "MAPE", "agregacion"))
+        for m, v in sorted(tabla.items(), key=lambda kv: kv[1]["RMSE"]):
+            print("%-17s %8.2f %8.2f %7.3f %7.1f  %s" %
+                  (m, v["RMSE"], v["MAE"], v["R2"], v["MAPE"], v["agregacion"]))
+        print("  retransformacion:")
+        for m, v in tabla.items():
+            print("    %-17s %s" % (m, v["smearing"]))
+
+    print("\n" + "=" * 78)
+    print("DEGRADACION, CV ALEATORIA -> CV ESPACIAL (la comparacion homogenea)")
+    for m, p in sorted(datos["degradacion_cv_a_cv_pct"].items(), key=lambda kv: kv[1]):
+        print("  %-17s %+7.2f %%" % (m, p))
+
+
+if __name__ == "__main__":
+    main()
