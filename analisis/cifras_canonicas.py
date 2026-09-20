@@ -141,10 +141,14 @@ def cv(estrategia):
 def moran():
     """Indice de Moran sobre los residuos del conjunto de prueba, los 5 del documento.
 
-    La fuente base (moran_holdout_significancia.csv) es la corrida de semilla
-    unica: correcta para los deterministas, pero para GNNWR es la misma
-    semilla 42 atipica que en el resto de metricas. Se sustituye por la media
-    de las diez replicas (0,089 en vez del 0,097 de esa corrida).
+    moran_holdout_significancia.csv es del 2026-07-19, anterior a la
+    reejecucion de GNNWR con las filas ordenadas (2026-09-20): su fila de
+    GNNWR, I=0,097 con p=0,001, es una corrida ya superada y no comparable con
+    el resto de esta tesis. El valor vigente de GNNWR es la media de sus diez
+    replicas post-reordenamiento (0,089), pero ese archivo de replicas no
+    guarda un p por semilla, de modo que NO se reporta un p para esa media:
+    no hay una prueba de permutaciones calculada sobre ella. Ver la nota al
+    pie de la Tabla 5.9 en el documento.
     """
     BASE_MORAN = "analisis/output_log/moran_holdout_significancia.csv"
     ETIQUETA = {"OLS": "OLS", "GWR-27": "GWR", "SANNWR": "SANNWR-adaptado", "RF": "Random Forest"}
@@ -155,8 +159,8 @@ def moran():
         filas[nombre] = {"I": round(float(r.I), 4), "p": float(r.p_sim), "fuente": BASE_MORAN}
     rep = pd.read_csv(_ruta("modelos/gnnwr/output_log/gnnwr_log_replicas.csv"))
     filas["GNNWR"] = {"I": round(float(rep.Moran_I_holdout.mean()), 4),
-                      "p": float(d[d.modelo == "GNNWR"].iloc[0].p_sim),
-                      "fuente": "modelos/gnnwr/output_log/gnnwr_log_replicas.csv (media de 10 semillas)"}
+                      "p": None,
+                      "fuente": "modelos/gnnwr/output_log/gnnwr_log_replicas.csv (media de 10 semillas; sin p por semilla)"}
     return filas
 
 
