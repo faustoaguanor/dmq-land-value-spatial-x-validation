@@ -99,8 +99,17 @@ def compute_ols(X_int, y):
     m = LinearRegression(fit_intercept=False).fit(X_int, y)
     return m.coef_.flatten().astype(np.float32)
 
-def metrics_log(y_true_orig, y_pred_log, y_true_log):
-    y_pred_orig = np.exp(y_pred_log)
+def smearing_factor(y_train_log, y_pred_train_log):
+    """s_M = mean(exp(e_train)), e_train en escala log (Duan 1983).
+
+    Solo con residuales de training del fold, sin fuga de test. Identico al de
+    gnnwr_log_cv_replicas.py.
+    """
+    return float(np.mean(np.exp(y_train_log - y_pred_train_log)))
+
+
+def metrics_log(y_true_orig, y_pred_log, y_true_log, s_M=1.0):
+    y_pred_orig = np.exp(y_pred_log) * s_M
     e = y_true_orig - y_pred_orig
     mae = float(np.mean(np.abs(e))); rmse = float(np.sqrt(np.mean(e**2)))
     mape = float(np.mean(np.abs(e/y_true_orig))*100)
@@ -109,7 +118,7 @@ def metrics_log(y_true_orig, y_pred_log, y_true_log):
     el = y_true_log - y_pred_log
     ss_rl = np.sum(el**2); ss_tl = np.sum((y_true_log-y_true_log.mean())**2)
     r2l = round(1-ss_rl/ss_tl,4) if ss_tl>0 else float("nan")
-    return {"MAE":round(mae,4),"RMSE":round(rmse,4),"MAPE":round(mape,4),"R2":r2,"R2_log":r2l}
+    return {"MAE":round(mae,4),"RMSE":round(rmse,4),"MAPE":round(mape,4),"R2":r2,"R2_log":r2l,"smearing_factor":round(s_M,6)}
 
 def compute_moran(v, c, k=MORAN_K):
     w = KNNWeights.from_array(c, k=k); w.transform="r"
@@ -226,7 +235,13 @@ for strat, splits in [("RandomKFold",splits_r),("SpatialBlock",splits_b),("Spati
 
         pred_log = predict(model, te_ld)
         y_pred_oos[te] = pred_log
-        m = metrics_log(yte_o, pred_log, yte_l)
+        # Smearing de Duan FOLD-ESPECIFICO, igual que OLS/GWR y que las
+        # replicas. Antes este bucle retransformaba con exp() a secas, de modo
+        # que la fila de GNNWR de la tabla de CV no era comparable con las de
+        # OLS y GWR, que si lo aplican. Corregido el 2026-09-19.
+        fulltr_ld = make_loader(dis_tr_sc, Xtr_i, ytr, BATCH_SIZE, False)
+        s_M = smearing_factor(ytr, predict(model, fulltr_ld))
+        m = metrics_log(yte_o, pred_log, yte_l, s_M=s_M)
         print(f"    MAE={m['MAE']:.2f}  RMSE={m['RMSE']:.2f}  "
               f"MAPE={m['MAPE']:.2f}%  R2={m['R2']:.4f}  ({time.time()-t0:.1f}s)", flush=True)
         all_records.append({"modelo":"GNNWR","estrategia":strat,"fold":fid,**m})

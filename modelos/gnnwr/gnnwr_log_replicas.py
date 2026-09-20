@@ -158,6 +158,8 @@ gdf = gpd.read_file(DATA_PATH, layer="puntos_mercado").to_crs(epsg=32717)
 gdf["predio_join"] = gdf["predio_join"].astype(int)
 split_df = pd.read_csv(SPLIT_PATH); split_df["predio_join"]=split_df["predio_join"].astype(int)
 gdf = gdf.merge(split_df[["predio_join","split"]], on="predio_join", how="left")
+# Orden determinista: mismo contrato que gnnwr_log.py. Anadido el 2026-09-19.
+gdf = gdf.sort_values("predio_join").reset_index(drop=True)
 
 coords = np.column_stack([gdf.geometry.x, gdf.geometry.y])
 y_orig = gdf["valor_m2"].values.astype(float)

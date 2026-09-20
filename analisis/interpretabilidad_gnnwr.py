@@ -165,6 +165,43 @@ pred_base=predict_gnnwr(model,dis_te_sc,Xte_int)
 rmse_base=rmse_orig(y_orig[test_mask],pred_base)
 print(f"RMSE base: {rmse_base:.4f}",flush=True)
 
+# -- Contrato de recarga -------------------------------------------------------
+# Cada columna de la matriz de distancias corresponde a un predio de
+# entrenamiento concreto y esta atada a pesos concretos de la primera capa de la
+# SWNN. Este script ordena por predio_join; si el checkpoint se entreno con otro
+# orden de filas, las columnas quedan permutadas respecto de los pesos y la
+# funcion evaluada NO es la aprendida, aunque la carga no falle por dimensiones.
+# Comprobacion anadida el 2026-09-19 a raiz del hallazgo R03.
+_esperado = None
+for _n in ("gnnwr_log_summary.csv", "gnnwr_log_holdout.csv", "gnnwr_log_results.csv"):
+    _p = ROOT / "modelos" / "gnnwr" / "output_log" / _n
+    if not _p.exists():
+        continue
+    _d = pd.read_csv(_p)
+    if "RMSE" not in _d.columns or not len(_d):
+        continue
+    if "estrategia" in _d.columns:
+        _m = _d["estrategia"].astype(str).str.lower().str.contains("holdout")
+        if _m.any():
+            _esperado = float(_d.loc[_m, "RMSE"].iloc[0])
+            break
+    else:
+        _esperado = float(_d["RMSE"].iloc[0])
+        break
+
+if _esperado is None:
+    print("  AVISO: no se leyo el RMSE de holdout del run base; contrato NO verificado.",
+          flush=True)
+elif abs(rmse_base - _esperado) > 0.5:
+    raise SystemExit(
+        "ABORTADO: el modelo recargado da RMSE {:.4f} y el run base reporto {:.4f}. "
+        "El checkpoint no corresponde al orden de predios que construye este script. "
+        "Reejecuta gnnwr_log.py y vuelve a lanzar este analisis. "
+        "NO uses la importancia que saldria de aqui.".format(rmse_base, _esperado))
+else:
+    print("  Contrato de recarga OK: {:.4f} reproduce {:.4f} del run base.".format(
+        rmse_base, _esperado), flush=True)
+
 # ── Permutation importance ────────────────────────────────────────────────────
 print(f"\nPermutation Importance ({N_REPEATS} reps x {len(FEAT_NAMES)} vars) ...",flush=True)
 rng2=np.random.default_rng(RANDOM_STATE+1)

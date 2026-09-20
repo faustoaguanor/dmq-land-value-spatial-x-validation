@@ -27,7 +27,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 _HERE = Path(__file__).resolve().parent
 ROOT = _HERE.parent.parent
-if not (ROOT / "datos" / "dataset.csv").exists():
+if not (ROOT / "datos" / "dataset.gpkg").exists():   # el .gpkg es lo que se lee
     ROOT = Path("/workspace/pod")
 
 sys.path.insert(0, str(ROOT / "spatial_cv"))

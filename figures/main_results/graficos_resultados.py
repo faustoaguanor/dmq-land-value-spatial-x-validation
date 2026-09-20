@@ -289,7 +289,7 @@ def g4_moran():
     ax.set_yticks(y)
     ax.set_yticklabels(d[nombre])
     for i, v in enumerate(d[col]):
-        ax.text(v + 0.006, i, f"{v:.3f}", va="center", fontsize=10,
+        ax.text(v + 0.006, i, _es(f"{v:.3f}"), va="center", fontsize=10,
                 color="#3d4852")
     ax.set_xlim(0, d[col].max() * 1.14)
     limpiar(ax, "Índice de Moran sobre los residuos")
