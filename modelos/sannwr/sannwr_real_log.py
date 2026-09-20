@@ -1,7 +1,9 @@
 """
-sannwr_real_log.py — SANNWR FIEL a Ni et al. (2022)
+sannwr_real_log.py — SANNWR-adaptado, sobre la propuesta de Ni et al. (2022)
 ====================================================
-Implementacion canonica para CONTRASTAR con la variante propia de la tesis
+Implementacion canonica de la tesis. El documento la llama SANNWR-adaptado
+porque fija alpha en 0,5 en lugar de aprender la combinacion de distancias, que
+es lo que hace la propuesta original. Se contrasta con la otra variante propia
 (sannwr_log.py, que usa grilla 20x20 + SAPDNN y se rotula "SANNWR*").
 
 SANNWR original (Ni et al., 2022): igual que GNNWR (una SWNN aprende pesos que

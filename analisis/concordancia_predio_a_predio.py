@@ -4,9 +4,10 @@ Una prueba de equivalencia sobre el MAE dice que dos modelos no se separan en
 promedio. No dice que valoren igual la misma parcela, y para el uso catastral
 esa es la pregunta pertinente: lo que se factura es el predio, no la media.
 
-GWR y GNNWR son la unica pareja que alcanza equivalencia estricta sobre el
-conjunto de prueba (Anexo F, margen 1,6 USD/m2). Este script mide cuanto se
-separan aun asi cuando se comparan sus 1011 predicciones una a una.
+GWR y GNNWR son la pareja con el margen mas estrecho sobre el conjunto de
+prueba, 3,4 USD/m2 tras la reejecucion de GNNWR del 2026-09-20, y su diferencia
+de MAE roza la significancia. Este script mide cuanto se separan cuando se
+comparan sus 1011 predicciones una a una.
 
 Alimenta el parrafo de la Seccion 5.2.2 que sigue a la Tabla 5.5.
 """

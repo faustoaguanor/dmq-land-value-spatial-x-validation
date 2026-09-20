@@ -6,7 +6,7 @@ El repositorio permite auditar el código, el protocolo experimental, las semill
 
 ## Entorno de referencia
 
-- Python 3.11
+- Python 3.12.10
 - CPU para OLS, GWR, Random Forest y análisis
 - NVIDIA RTX 4090 de 24 GB para las ejecuciones neuronales de referencia
 - PyTorch 2.5.1
