@@ -95,12 +95,7 @@ def g1_interpolacion():
     # corresponde a las corridas base y quedo desfasado para GNNWR tras la
     # reejecucion del 2026-09-20: la figura mostraba 98,8 donde la tabla decia
     # 97,89.
-    import json
-    import subprocess
-    import sys
-    salida = subprocess.run([sys.executable, str(ROOT / "analisis" / "cifras_canonicas.py"), "--json"],
-                            capture_output=True, text=True, encoding="utf-8")
-    canon = json.loads(salida.stdout)["conjunto_de_prueba"]
+    canon = _canonico()["conjunto_de_prueba"]
     d = pd.DataFrame([{"modelo": m, "RMSE_smeared": v["RMSE"], "R2_smeared": v["R2"]}
                       for m, v in canon.items()])
     faltan = set(COLOR) - set(d.modelo)
@@ -147,6 +142,29 @@ def _por_bloque():
     return fuera
 
 
+def _canonico():
+    """Cifras del documento, tal como las emite analisis/cifras_canonicas.py.
+
+    Se lee de ahi y no de los CSV sueltos porque el comparativo de holdout
+    corresponde a las corridas base y quedo desfasado para GNNWR tras su
+    reejecucion: las figuras mostraban 98,8 donde las tablas dicen 97,89.
+    """
+    global _CANON
+    if _CANON is None:
+        import json
+        import subprocess
+        import sys
+        r = subprocess.run([sys.executable, str(ROOT / "analisis" / "cifras_canonicas.py"), "--json"],
+                           capture_output=True, text=True, encoding="utf-8")
+        if r.returncode != 0:
+            raise RuntimeError("cifras_canonicas.py fallo:\n" + r.stderr[-800:])
+        _CANON = json.loads(r.stdout)
+    return _CANON
+
+
+_CANON = None
+
+
 def _dispersion_cv():
     """Desviacion entre las cinco particiones, en los dos esquemas cruzados.
 
@@ -182,11 +200,7 @@ def g2_tres_esquemas():
     """
     v = _dispersion_cv()
 
-    d = pd.read_csv(ANL / "comparativo_holdout_smeared.csv")
-    d["modelo"] = d.modelo.replace(ALIAS)
-    prueba = dict(zip(d.modelo, d.RMSE_smeared))
-    prueba["Random Forest"] = pd.read_csv(
-        MOD / "baselines/output_log/rf_log_holdout.csv").RMSE.iloc[0]
+    prueba = {m: v["RMSE"] for m, v in _canonico()["conjunto_de_prueba"].items()}
     faltan = set(COLOR) - set(prueba)
     assert not faltan, f"faltan modelos en la figura: {faltan}"
 
