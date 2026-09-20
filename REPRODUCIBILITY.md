@@ -83,7 +83,7 @@ La dispersión que acompaña a esas medias es la que hay **entre bloques**, no e
 
 Algunas salidas de `results/raw/analysis/` se calcularon antes de la reejecución de GNNWR del 20 de septiembre de 2026 y conservan sus cifras anteriores. Se publican como registro de lo que se hizo, no como verificación de la ejecución vigente:
 
-- `moran_holdout_significancia.csv` informa 0,097076 para GNNWR, que corresponde a la corrida previa; el valor vigente es 0,089, media de las diez réplicas, y está en `results/moran_conjunto_prueba.csv`.
+- El archivo de significancia del índice de Moran sobre el conjunto de prueba informa 0,097076 para GNNWR, que corresponde a la corrida previa; el valor vigente es 0,089, media de las diez réplicas, y está en `results/moran_conjunto_prueba.csv`.
 - Las sensibilidades de duplicados, extremos y codificación, y la comparación con el paquete de referencia, se ejecutaron igualmente antes de esa reejecución.
 
 Las cifras que el documento reporta salen de `analisis/cifras_canonicas.py`, que declara para cada tabla de qué archivo procede y con qué regla se agrega.
