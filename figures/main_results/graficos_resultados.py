@@ -90,16 +90,19 @@ def limpiar(ax, eje_x):
 
 def g1_interpolacion():
     """RMSE y R al cuadrado sobre el conjunto de prueba."""
-    d = pd.read_csv(ANL / "comparativo_holdout_smeared.csv")
-    d["modelo"] = d.modelo.replace(ALIAS)
-    d = d[d.modelo.isin(COLOR)][["modelo", "RMSE_smeared", "R2_smeared"]]
-
-    # Random Forest no esta en ese comparativo: los baselines tabulares se
-    # calcularon aparte y guardan sus metricas ya corregidas.
-    rf = pd.read_csv(MOD / "baselines/output_log/rf_log_holdout.csv").iloc[0]
-    d = pd.concat([d, pd.DataFrame([{"modelo": "Random Forest",
-                                     "RMSE_smeared": rf.RMSE,
-                                     "R2_smeared": rf.R2}])])
+    # Las cifras salen de cifras_canonicas.py, que es la misma fuente que
+    # alimenta la Tabla 5.2. Antes se leia comparativo_holdout_smeared.csv, que
+    # corresponde a las corridas base y quedo desfasado para GNNWR tras la
+    # reejecucion del 2026-09-20: la figura mostraba 98,8 donde la tabla decia
+    # 97,89.
+    import json
+    import subprocess
+    import sys
+    salida = subprocess.run([sys.executable, str(ROOT / "analisis" / "cifras_canonicas.py"), "--json"],
+                            capture_output=True, text=True, encoding="utf-8")
+    canon = json.loads(salida.stdout)["conjunto_de_prueba"]
+    d = pd.DataFrame([{"modelo": m, "RMSE_smeared": v["RMSE"], "R2_smeared": v["R2"]}
+                      for m, v in canon.items()])
     faltan = set(COLOR) - set(d.modelo)
     assert not faltan, f"faltan modelos en la figura: {faltan}"
     d = d.sort_values("RMSE_smeared", ascending=False)
