@@ -4,10 +4,10 @@ Una prueba de equivalencia sobre el MAE dice que dos modelos no se separan en
 promedio. No dice que valoren igual la misma parcela, y para el uso catastral
 esa es la pregunta pertinente: lo que se factura es el predio, no la media.
 
-GWR y GNNWR son la pareja con el margen mas estrecho sobre el conjunto de
-prueba, 3,4 USD/m2 tras la reejecucion de GNNWR del 2026-09-20, y su diferencia
-de MAE roza la significancia. Este script mide cuanto se separan cuando se
-comparan sus 1011 predicciones una a una.
+GWR y GNNWR son la pareja de menor margen mínimo entre las que sí difieren de
+forma significativa tras Holm sobre el conjunto de prueba (2026-09-21). Este
+script mide cuanto se separan cuando se comparan sus 1011 predicciones una a
+una.
 
 Alimenta el parrafo de la Seccion 5.2.2 que sigue a la Tabla 5.5.
 """
@@ -18,25 +18,34 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Factores de smearing de Duan, los mismos que usa tost_equivalencia.py.
+# El factor de smearing de cada modelo se recalcula de sus propias predicciones
+# de entrenamiento (s_M = mean(exp(residuo_train))), igual que en
+# tost_equivalencia.py. Antes iba hardcodeado aqui (GNNWR en 1,031205) y quedo
+# desfasado del 1,012768 real tras la reejecucion de GNNWR del 2026-09-20 sin
+# que nadie lo actualizara -- mismo hallazgo de la auditoria Codex que motivo
+# la correccion en tost_equivalencia.py.
 MODELOS = {
-    "GWR":   ("modelos/gwr/output_log_27vars/gwr27_log_predictions.csv", 1.026509),
-    "GNNWR": ("modelos/gnnwr/output_log/gnnwr_log_predictions.csv",      1.031205),
+    "GWR":   "modelos/gwr/output_log_27vars/gwr27_log_predictions.csv",
+    "GNNWR": "modelos/gnnwr/output_log/gnnwr_log_predictions.csv",
 }
 
 
-def cargar(ruta, smearing):
+def cargar(ruta):
     d = pd.read_csv(ROOT / ruta)
-    d = d[d["split"] == "test"].copy()
     d["predio_join"] = d["predio_join"].astype(int)   # contrato de clave canonica
-    d["pred"] = np.exp(d["y_pred_log"]) * smearing
+    tr = d[d["split"] == "train"]
+    s_M = float(np.mean(np.exp(tr["y_obs_log"].values - tr["y_pred_log"].values)))
+    d = d[d["split"] == "test"].copy()
+    d["pred"] = np.exp(d["y_pred_log"]) * s_M
     d["obs"] = np.exp(d["y_obs_log"])
+    print(f"  smearing {ruta.split('/')[1]:<8} {s_M:.6f}")
     return d[["predio_join", "pred", "obs"]]
 
 
 (a_nom, b_nom) = MODELOS.keys()
-a = cargar(*MODELOS[a_nom])
-b = cargar(*MODELOS[b_nom])
+print("Factores de smearing recalculados de las predicciones (train):")
+a = cargar(MODELOS[a_nom])
+b = cargar(MODELOS[b_nom])
 m = a.merge(b, on="predio_join", suffixes=("_a", "_b"))
 
 dif = (m["pred_a"] - m["pred_b"]).abs()

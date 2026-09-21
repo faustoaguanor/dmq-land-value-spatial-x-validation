@@ -42,14 +42,23 @@ CELL_M = 2530         # celda del bootstrap espacial (= buffer de SpatialBlock_b
 N_BOOT = 2000
 RNG = np.random.default_rng(42)
 
-# modelo -> (archivo de predicciones holdout, factor de smearing, archivo de folds)
+# modelo -> (archivo de predicciones holdout, archivo de folds)
+# El factor de smearing YA NO se fija a mano: se recalcula de las predicciones
+# de entrenamiento de este mismo archivo (s_M = mean(exp(residuo_train))), igual
+# que hace cada gnnwr_log.py/ols_log.py/etc. al producirlas. Antes iba
+# hardcodeado aqui, y cuando GNNWR se reejecuto el 2026-09-20 (orden de filas
+# corregido) ese literal (1,031205) no se actualizo: quedo desfasado del
+# 1,012768 real, y ese desfase cambiaba p_diferencia de GWR-GNNWR de 0,0092 a
+# 0,0184 bruto (Holm) frente al 0,0018/0,056 calculado con el numero viejo.
+# Hallazgo de la auditoria Codex del 2026-09-21, verificado de forma
+# independiente antes de aplicar la correccion.
 MODELOS = {
-    "OLS":    ("modelos/ols/output_log/ols_log_predictions.csv",                  1.089736, "modelos/ols/output_log/ols_log_results.csv"),
-    "GWR":    ("modelos/gwr/output_log_27vars/gwr27_log_predictions.csv",         1.026509, "modelos/gwr/output_log_27vars/gwr27_log_results.csv"),
-    "GNNWR":  ("modelos/gnnwr/output_log/gnnwr_log_predictions.csv",              1.031205, "modelos/gnnwr/output_log/gnnwr_log_results.csv"),
-    "SANNWR": ("modelos/sannwr/output_log_real/sannwr_real_log_predictions.csv",  0.997983, "modelos/sannwr/output_log_real/sannwr_real_log_results.csv"),
-    "RF":     ("modelos/baselines/output_log/rf_log_predictions.csv",             1.003332, "modelos/baselines/output_log/rf_log_results.csv"),
-    "MLP":    ("modelos/mlp/output_log/mlp_log_predictions.csv",                  0.989259, "modelos/mlp/output_log/mlp_log_results.csv"),
+    "OLS":    ("modelos/ols/output_log/ols_log_predictions.csv",                  "modelos/ols/output_log/ols_log_results.csv"),
+    "GWR":    ("modelos/gwr/output_log_27vars/gwr27_log_predictions.csv",         "modelos/gwr/output_log_27vars/gwr27_log_results.csv"),
+    "GNNWR":  ("modelos/gnnwr/output_log/gnnwr_log_predictions.csv",              "modelos/gnnwr/output_log/gnnwr_log_results.csv"),
+    "SANNWR": ("modelos/sannwr/output_log_real/sannwr_real_log_predictions.csv",  "modelos/sannwr/output_log_real/sannwr_real_log_results.csv"),
+    "RF":     ("modelos/baselines/output_log/rf_log_predictions.csv",             "modelos/baselines/output_log/rf_log_results.csv"),
+    "MLP":    ("modelos/mlp/output_log/mlp_log_predictions.csv",                  "modelos/mlp/output_log/mlp_log_results.csv"),
 }
 
 # ---------------- (A) holdout: error absoluto pareado por predio ----------------
@@ -60,14 +69,22 @@ geo["x"] = gdf.geometry.x.values
 geo["y"] = gdf.geometry.y.values
 
 ae = {}
-for name, (pred_f, s_M, _) in MODELOS.items():
+smearing_usado = {}
+for name, (pred_f, _) in MODELOS.items():
     df = pd.read_csv(ROOT / pred_f)
-    df = df[df["split"] == "test"].copy()
     df["predio_join"] = df["predio_join"].astype(int)
+    tr = df[df["split"] == "train"]
+    s_M = float(np.mean(np.exp(tr["y_obs_log"].values - tr["y_pred_log"].values)))
+    smearing_usado[name] = s_M
+    df = df[df["split"] == "test"].copy()
     y_obs = np.exp(df["y_obs_log"].values)
     y_hat = np.exp(df["y_pred_log"].values) * s_M
     s = pd.Series(np.abs(y_obs - y_hat), index=df["predio_join"].values)
     ae[name] = s[~s.index.duplicated()].sort_index()
+
+print("Factores de smearing recalculados de las predicciones (train):")
+for n, v in smearing_usado.items():
+    print(f"  {n:<8} {v:.6f}")
 
 common = None
 for s in ae.values():
@@ -128,7 +145,7 @@ REPLICAS = {
 }
 
 fold_mae = {}
-for name, (_, _, res_f) in MODELOS.items():
+for name, (_, res_f) in MODELOS.items():
     if name in REPLICAS:
         path, col, val = REPLICAS[name]
         df = pd.read_csv(ROOT / path)
