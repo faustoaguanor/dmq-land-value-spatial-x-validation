@@ -150,15 +150,19 @@ def moran():
     no hay una prueba de permutaciones calculada sobre ella. Ver la nota al
     pie de la Tabla 5.9 en el documento.
     """
+    # Sin redondeo intermedio: 0,0885236 y 0,100458 truncados a 4 decimales
+    # (0,0885 y 0,1005) caen justo en el punto medio, y un segundo redondeo a
+    # 3 en la figura los desviaba a 0,088 y 0,101 en vez de 0,089 y 0,100. El
+    # redondeo se hace una sola vez, al presentar.
     BASE_MORAN = "analisis/output_log/moran_holdout_significancia.csv"
     ETIQUETA = {"OLS": "OLS", "GWR-27": "GWR", "SANNWR": "SANNWR-adaptado", "RF": "Random Forest"}
     d = pd.read_csv(_ruta(BASE_MORAN))
     filas = {}
     for fila, nombre in ETIQUETA.items():
         r = d[d.modelo == fila].iloc[0]
-        filas[nombre] = {"I": round(float(r.I), 4), "p": float(r.p_sim), "fuente": BASE_MORAN}
+        filas[nombre] = {"I": float(r.I), "p": float(r.p_sim), "fuente": BASE_MORAN}
     rep = pd.read_csv(_ruta("modelos/gnnwr/output_log/gnnwr_log_replicas.csv"))
-    filas["GNNWR"] = {"I": round(float(rep.Moran_I_holdout.mean()), 4),
+    filas["GNNWR"] = {"I": float(rep.Moran_I_holdout.mean()),
                       "p": None,
                       "fuente": "modelos/gnnwr/output_log/gnnwr_log_replicas.csv (media de 10 semillas; sin p por semilla)"}
     return filas
