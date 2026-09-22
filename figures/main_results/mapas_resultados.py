@@ -41,6 +41,7 @@ Salidas: mapa_precio.png, mapa_error.png, mapa_sesgo.png, mapa_soporte.png
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 
 import geopandas as gpd
 import matplotlib
@@ -74,6 +75,16 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 OUT = Path(__file__).parent
 DATOS = ROOT / "figures" / "aplicacion_valoracion" / "map_data_holdout.csv"
 CAPAS = ROOT.parent / "capas" / "PARROQUIAS_F.shp"
+sys.path.insert(0, str(ROOT / "analisis"))
+from predicciones_base import cargar_predicciones
+
+PREDICCIONES = {
+    "RF": "baselines/output_log/rf_log_predictions.csv",
+    "SANNWR": "sannwr/output_log_real/sannwr_real_log_predictions.csv",
+    "GWR-27": "gwr/output_log_27vars/gwr27_log_predictions.csv",
+    "GNNWR": "gnnwr/output_log/gnnwr_log_predictions.csv",
+    "OLS": "ols/output_log/ols_log_predictions.csv",
+}
 
 plt.rcParams.update({"font.family": "serif", "font.size": 10, "figure.dpi": 150})
 
@@ -96,6 +107,24 @@ _ZONAS = None
 
 def cargar():
     d = pd.read_csv(DATOS)
+    d["predio_join"] = d["predio_join"].astype(int)
+    if d["predio_join"].duplicated().any():
+        raise ValueError("El archivo de mapas duplica predios")
+    for modelo, relativa in PREDICCIONES.items():
+        pred = cargar_predicciones(ROOT / "modelos" / relativa)
+        test = pred.loc[pred["split"].eq("test")].set_index("predio_join")
+        if set(test.index) != set(d["predio_join"]):
+            raise ValueError(f"{modelo}: IDs distintos en mapas y predicciones")
+        esperado = test.loc[d["predio_join"], "pred_usd"].to_numpy()
+        if not np.allclose(d[f"pred_{modelo}"], esperado, rtol=0, atol=1e-6):
+            raise ValueError(f"{modelo}: datos cartograficos desactualizados; ejecutar generate_applied_maps.py")
+        if not np.allclose(d["valor_m2"], test.loc[d["predio_join"], "obs_usd"], rtol=1e-6, atol=1e-6):
+            raise ValueError(f"{modelo}: observaciones distintas en mapas y predicciones")
+        residuo = d["valor_m2"].to_numpy() - esperado
+        for prefijo, valor in [("err", np.abs(residuo)), ("resid", residuo),
+                              ("relerr", np.abs(residuo) / d["valor_m2"].to_numpy())]:
+            if not np.allclose(d[f"{prefijo}_{modelo}"], valor, rtol=0, atol=1e-6):
+                raise ValueError(f"{modelo}: {prefijo} desactualizado en los datos cartograficos")
     g = gpd.GeoDataFrame(d, geometry=gpd.points_from_xy(d.x, d.y), crs="EPSG:32717")
     parr = gpd.read_file(CAPAS).to_crs(32717)
     return g, parr, parr.geometry.union_all()

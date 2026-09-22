@@ -57,3 +57,15 @@ AGENTS.md
 Thumbs.db
 desktop.ini
 .pr-body.md
+
+# Derivados por observación y matrices del entorno privado
+**/mascara_imputacion.csv
+**/*_pred.csv
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.parquet
+*.feather
+*.h5
+*.hdf5

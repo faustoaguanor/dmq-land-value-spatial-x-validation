@@ -1,5 +1,8 @@
 # Modelos del precio del suelo urbano del DMQ bajo validación aleatoria y espacial
 
+La versión que acompaña la tesis está publicada en la etiqueta [entrega-2026-09-21](https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/tree/entrega-2026-09-21) e incorpora las correcciones posteriores a v2.8. Su identificación y alcance están en [VERSION_ENTREGA.json](VERSION_ENTREGA.json).
+
+
 [![Quality checks](https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/actions/workflows/quality.yml/badge.svg)](https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/actions/workflows/quality.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
@@ -39,9 +42,11 @@ Hallazgos:
 - Al pasar del conjunto de prueba a la validación por bloques espaciales, su RMSE aumenta 41.7 % y cae al cuarto puesto. Comparando entre sí las dos validaciones cruzadas, que es la comparación homogénea, el aumento es 34.4 %.
 - GNNWR encabeza la validación por bloques espaciales y es, junto con SANNWR-adaptado, el que menos error relativo gana al pasar de la validación cruzada aleatoria a la espacial (7.7 % y 6.7 % respectivamente, frente al 34.4 % de Random Forest).
 - Con solo cinco regiones, la ventaja de GNNWR/SANNWR-adaptado frente a Random Forest no alcanza significancia robusta: se reporta como tendencia, no como superioridad establecida.
-- Ningún modelo elimina la autocorrelación residual.
+- Los cuatro modelos con prueba de Moran publicada conservan autocorrelación residual significativa. El Moran medio de GNNWR se presenta sin p asociado a ese resumen.
 
 Las tablas canónicas están en [`results/`](results/) y los resultados agregados de cada ejecución en [`results/raw/`](results/raw/). No se publican predicciones ni errores por predio.
+
+Las correcciones incluidas en la etiqueta de entrega están descritas en [CORRECCIONES_AUDITORIA.md](CORRECCIONES_AUDITORIA.md). Los límites de recarga de checkpoints y de disponibilidad de predicciones se detallan en [TRAZABILIDAD_ARTEFACTOS.md](TRAZABILIDAD_ARTEFACTOS.md).
 
 ## Revisión metodológica
 

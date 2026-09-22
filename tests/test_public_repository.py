@@ -11,12 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class PublicRepositoryContracts(unittest.TestCase):
     def test_restricted_file_types_are_absent(self):
-        forbidden = {".gpkg", ".shp", ".shx", ".dbf", ".tif", ".tiff", ".pt", ".pth", ".onnx", ".zip", ".docx"}
+        forbidden = {".gpkg", ".shp", ".shx", ".dbf", ".tif", ".tiff", ".pt", ".pth", ".onnx", ".zip", ".docx", ".pkl", ".pickle", ".npy", ".npz", ".parquet", ".feather", ".h5", ".hdf5"}
         found = [p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*") if p.is_file() and ".git" not in p.parts and p.suffix.lower() in forbidden]
         self.assertEqual(found, [])
 
     def test_restricted_names_are_absent(self):
-        patterns = ("dataset.csv", "dataset.gpkg", "val_catas.csv", "fold_assignments.csv", "split.csv")
+        patterns = ("dataset.csv", "dataset.gpkg", "val_catas.csv", "fold_assignments.csv", "split.csv", "mascara_imputacion.csv")
         found = [p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*") if p.is_file() and p.name.lower() in patterns]
         self.assertEqual(found, [])
 
@@ -33,7 +33,7 @@ class PublicRepositoryContracts(unittest.TestCase):
 
     def test_published_tables_have_no_record_identifiers(self):
         forbidden_columns = {"predio", "predio_join", "x", "y", "geometry", "lat", "lon", "longitude", "latitude"}
-        for path in ROOT.glob("results/**/*.csv"):
+        for path in list(ROOT.glob("results/**/*.csv")) + list(ROOT.glob("revision_metodologica/salidas/**/*.csv")):
             with path.open(encoding="utf-8", newline="") as handle:
                 header = {column.strip().lower() for column in next(csv.reader(handle))}
             self.assertFalse(header & forbidden_columns, path.name)
@@ -44,7 +44,7 @@ class PublicRepositoryContracts(unittest.TestCase):
         # El orden cambio al pasar los modelos estocasticos a la media de sus
         # diez replicas: GNNWR queda en 97,89 y adelanta a GWR, que esta en
         # 98,15. Los separan 0,26, dentro de la variacion de GNNWR entre
-        # semillas, de modo que el documento los declara indistinguibles.
+        # semillas. Este test verifica el orden, no una equivalencia inferencial.
         self.assertEqual([row["model"] for row in rows], ["Random Forest", "SANNWR", "GNNWR", "GWR", "OLS"])
         self.assertAlmostEqual(float(rows[0]["rmse"]), 76.75)
         self.assertAlmostEqual(float(rows[-1]["rmse"]), 139.01)

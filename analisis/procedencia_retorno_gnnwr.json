@@ -1,0 +1,22 @@
+{
+  "version": "entrega-2026-09-21",
+  "archivo_retorno": "resultados_gnnwr.tar.gz",
+  "sha256_retorno": "afbc6fe13d909add53ebeab0722d6d96899db8fa6d72882e56e64048b9a81cfa",
+  "commit_integracion": "d6e55615f38483f50ede249b1981bcf62aaa9126",
+  "archivos_resultados_conciliados": 13,
+  "claves_cv_conciliadas_en_registros": 50,
+  "semillas_prueba_conciliadas_en_registros": 10,
+  "predicciones_base_por_id": {
+    "n": 5051,
+    "train": 4040,
+    "test": 1011
+  },
+  "recarga_en_pod": {
+    "documentada": true,
+    "rmse": 91.7141,
+    "registro": "registros/paso3.log",
+    "linea": 6
+  },
+  "pesos_incluidos_en_retorno": false,
+  "limite": "La recarga documentada en el pod no equivale a disponer del checkpoint correspondiente para repetir localmente la inferencia."
+}

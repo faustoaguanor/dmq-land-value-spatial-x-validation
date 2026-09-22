@@ -1,0 +1,32 @@
+{
+  "convencion": "corridas base; factor calculado sobre train de cada archivo",
+  "familia_holm": 10,
+  "supuesto_n_efectivo": "correlograma exponencial ajustado",
+  "fuentes": {
+    "OLS": {
+      "ruta": "modelos/ols/output_log/ols_log_predictions.csv",
+      "sha256": "e53986ac82ec53fa25aef00dacbefaa157de792c573b06b03d546bf1a9fc17fa",
+      "smearing_train": 1.0897364321203291
+    },
+    "GWR": {
+      "ruta": "modelos/gwr/output_log_27vars/gwr27_log_predictions.csv",
+      "sha256": "51bda889daed7811b9ec0fa936032f3e238096fc4fb674d9f1ec9f032a694c1e",
+      "smearing_train": 1.0265086680966091
+    },
+    "GNNWR": {
+      "ruta": "modelos/gnnwr/output_log/gnnwr_log_predictions.csv",
+      "sha256": "ab5dca540dd052fd5c75f3e8b48fffb496f6d1043fdc19a0922703e93148a011",
+      "smearing_train": 1.0127681896945657
+    },
+    "SANNWR-adaptado": {
+      "ruta": "modelos/sannwr/output_log_real/sannwr_real_log_predictions.csv",
+      "sha256": "590cb1089ea2c5ae1b50a02b8786218539fa531a49e99895e780a6a72dbf7f63",
+      "smearing_train": 0.9979826287798228
+    },
+    "RF": {
+      "ruta": "modelos/baselines/output_log/rf_log_predictions.csv",
+      "sha256": "95544d4bc846c77c223960ac4b0ec1aea1ab9f0e6a83da7c04cf5d2db9e4c1b5",
+      "smearing_train": 1.0033323372876426
+    }
+  }
+}

@@ -25,6 +25,8 @@ Uso:
 from __future__ import annotations
 import argparse
 import itertools
+import hashlib
+import json
 import sys
 from pathlib import Path
 
@@ -38,6 +40,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from comun.rutas import REPO, salida, pr, tabla_md      # noqa: E402
 from comun import datos as D, nombres as N              # noqa: E402
 from comun.metricas import moran_i                      # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "analisis"))
+from predicciones_base import cargar_predicciones
 
 # Predicciones almacenadas de la version defendida (test + train, escala log).
 FUENTES = {
@@ -104,7 +108,7 @@ def n_efectivo(coords, valores, bloque=800):
 
 def conjunto_independiente(coords, radio):
     """Cardinal de un conjunto de puntos separados entre si por mas de `radio`
-    (greedy). Cota inferior interpretable del numero de localizaciones independientes."""
+    (greedy). Cardinal de un subconjunto separado; no demuestra independencia estadistica."""
     arbol = KDTree(coords)
     tomados, prohibidos = [], set()
     for i in range(len(coords)):
@@ -124,15 +128,8 @@ def cargar_errores(conj):
         if not p.exists():
             faltan.append(ruta)
             continue
-        df = pd.read_csv(p)
-        df["predio_join"] = df["predio_join"].astype(int)
-        tr = df[df["split"] == "train"]
-        s_M = float(np.mean(np.exp(tr["y_obs_log"] - tr["y_pred_log"]))) if len(tr) else 1.0
-        te = df[df["split"] == "test"].copy()
-        te["pred_usd"] = np.exp(te["y_pred_log"]) * s_M
-        te["obs_usd"] = np.exp(te["y_obs_log"])
-        te["error_abs"] = (te["obs_usd"] - te["pred_usd"]).abs()
-        te["error_cuad"] = (te["obs_usd"] - te["pred_usd"]) ** 2
+        df = cargar_predicciones(p, conj.gdf)
+        te = df.loc[df["split"].eq("test")].copy()
         fuera[modelo] = te.set_index("predio_join")[["error_abs", "error_cuad", "pred_usd", "obs_usd"]]
     return fuera, faltan
 
@@ -146,7 +143,7 @@ def main() -> int:
     conj = D.cargar()
     errores, faltan = cargar_errores(conj)
     if faltan:
-        pr("[aviso] faltan predicciones almacenadas: " + ", ".join(faltan))
+        raise FileNotFoundError("Faltan predicciones para la familia completa de diez parejas: " + ", ".join(faltan))
     if len(errores) < 2:
         pr("no hay suficientes modelos para comparar")
         return 1
@@ -175,9 +172,6 @@ def main() -> int:
     # -- 2. tamano efectivo de la diferencia entre modelos -------------------
     modelos = list(errores)
     pares = list(itertools.combinations(modelos, 2))
-    if args.pares:
-        pedidos = {p.replace(" ", "") for p in args.pares}
-        pares = [p for p in pares if f"{p[0]}-{p[1]}" in pedidos or f"{p[1]}-{p[0]}" in pedidos]
 
     pruebas = []
     for a, b in pares:
@@ -202,18 +196,30 @@ def main() -> int:
         trg = stats.ttest_1samp(por_region, 0.0)
         pruebas.append({
             "modelo_a": a, "modelo_b": b,
-            "dif_media_MAE": round(media, 3),
-            "n_nominal": n, "p_nominal": round(float(p_nom), 5),
+            "dif_media_MAE": media,
+            "n_nominal": n, "p_nominal": float(p_nom),
             "moran_I_diferencia": round(I, 4), "moran_p": p_moran,
-            "n_efectivo": round(neff, 1),
+            "n_efectivo": neff,
             "reduccion_pct": round(100 * (1 - neff / n), 1),
-            "p_con_n_efectivo": round(float(p_eff), 5),
-            "n_bloques": len(por_bloque), "p_por_bloque": round(float(tb.pvalue), 5),
-            "n_regiones": len(por_region), "p_por_region": round(float(trg.pvalue), 5),
+            "p_con_n_efectivo": float(p_eff),
+            "n_bloques": len(por_bloque), "p_por_bloque": float(tb.pvalue),
+            "n_regiones": len(por_region), "p_por_region": float(trg.pvalue),
         })
 
     tab_n = pd.DataFrame(filas)
     tab_p = pd.DataFrame(pruebas)
+    # Holm siempre sobre las diez parejas y antes de filtrar la presentacion.
+    for col in ("p_nominal", "p_con_n_efectivo"):
+        valores = tab_p[col].to_numpy()
+        orden = np.argsort(valores)
+        ajustados = np.minimum(1., np.maximum.accumulate(valores[orden] * np.arange(len(valores), 0, -1)))
+        tab_p.loc[tab_p.index[orden], col + "_holm"] = ajustados
+    if args.pares:
+        pedidos = {p.replace(" ", "") for p in args.pares}
+        tab_p = tab_p.loc[[f"{a}-{b}" in pedidos or f"{b}-{a}" in pedidos
+                          for a, b in zip(tab_p.modelo_a, tab_p.modelo_b)]].copy()
+        if tab_p.empty:
+            raise ValueError("Ninguna pareja solicitada coincide con los cinco modelos")
     for col in ("p_nominal", "p_con_n_efectivo", "p_por_bloque", "p_por_region"):
         rechaza = tab_p[col] < 0.05
         tab_p[f"significativo_{col.replace('p_', '')}"] = rechaza
@@ -234,7 +240,7 @@ def main() -> int:
     p3 = salida("obs6", "localizaciones_independientes.csv"); indep.to_csv(p3, index=False)
 
     cols = ["modelo_a", "modelo_b", "dif_media_MAE", "n_nominal", "p_nominal",
-            "n_efectivo", "reduccion_pct", "p_con_n_efectivo", "p_por_bloque", "p_por_region"]
+            "n_efectivo", "reduccion_pct", "p_con_n_efectivo", "p_con_n_efectivo_holm", "p_por_bloque", "p_por_region"]
     pr("\n" + tabla_md(tab_p[cols]))
     pr("\n" + tabla_md(indep))
 
@@ -243,7 +249,7 @@ def main() -> int:
           f"Conjunto de prueba: {len(predios_te)} predios. Ese numero no es el numero de",
           "observaciones independientes disponibles para inferir diferencias de",
           "generalizacion espacial.", "",
-          "## Cuantas observaciones independientes hay realmente", "", tabla_md(indep), "",
+          "## Localizaciones separadas y unidades descriptivas (no prueba de independencia)", "", tabla_md(indep), "",
           "## Autocorrelacion del error y tamano efectivo", "", tabla_md(tab_n), "",
           "## Pruebas pareadas bajo los tres supuestos", "", tabla_md(tab_p[cols]), ""]
     if len(cambia):
@@ -258,10 +264,21 @@ def main() -> int:
            "dependencia espacial del error, a un numero mucho menor de observaciones",
            "independientes; y cuando lo que se quiere inferir es generalizacion a zonas",
            "nuevas, la unidad de analisis no es el predio sino la region, de las que hay",
-           "cinco o diez. Las pruebas pareadas sobre predios individuales deben leerse como",
+           "cinco particiones o diez zonas de estratificacion. Ninguna particion garantiza independencia.",
+           "El tamano efectivo es una sensibilidad aproximada bajo un correlograma ajustado.",
+           "Holm se calcula sobre diez parejas; no convierte esta sensibilidad en una prueba espacial definitiva.",
+           "Las pruebas pareadas sobre predios individuales deben leerse como",
            "descriptivas y no como inferencia sobre capacidad de generalizacion espacial.", ""]
     p4 = salida("obs6", "tamano_efectivo.md")
     p4.write_text("\n".join(md), encoding="utf-8")
+    procedencia = {"convencion": "corridas base; factor calculado sobre train de cada archivo",
+                   "familia_holm": 10, "supuesto_n_efectivo": "correlograma exponencial ajustado", "fuentes": {}}
+    for modelo, relativa in FUENTES.items():
+        path = REPO / relativa
+        df = cargar_predicciones(path, conj.gdf)
+        procedencia["fuentes"][modelo] = {"ruta": relativa, "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                                            "smearing_train": df.attrs["smearing_factor"]}
+    salida("obs6", "procedencia.json").write_text(json.dumps(procedencia, ensure_ascii=False, indent=2), encoding="utf8")
     pr(f"\n[csv] {p1}\n[csv] {p2}\n[csv] {p3}\n[md]  {p4}")
     return 0
 

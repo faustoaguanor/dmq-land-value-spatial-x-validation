@@ -1,0 +1,180 @@
+{
+  "revision_base_verificada": "18595698ba6a09fd876dd18b3c488fed2374c12e",
+  "aviso": "El commit identifica la base inspeccionada, no acredita el commit de entrenamiento.",
+  "matriz_actual": {
+    "covariables": 27,
+    "columnas_codificadas": 30,
+    "coeficientes_con_intercepto": 31
+  },
+  "artefactos": [
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_final.pt",
+      "n_referencias": 4040,
+      "n_features_con_intercepto": 31,
+      "contiene_IDs": false,
+      "sha256": "45ed43ac5b6ebed3176105e9c449210adde86d683e5799b5ad333631afc98deb",
+      "estado": "recarga_no_conciliada",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados",
+      "comprobacion_recarga": {
+        "n": 5051,
+        "max_abs_log_error": 0.8303895162231445,
+        "mean_abs_log_error": 0.05507566772600445,
+        "n_train": 4040,
+        "n_test": 1011,
+        "n_features": 30,
+        "dispositivo": "CPU",
+        "entrenamientos": 0
+      }
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_RandomKFold_fold0.pt",
+      "n_referencias": 3231,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "1997f36ddf0971d3c4acd7f2f751aa289486f59228ab2bfc49d4e1997a3b9118",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_RandomKFold_fold1.pt",
+      "n_referencias": 3231,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "b1baa7153b20be963ab789a3adeb106bcaca5343a41eac4056fbdd54df5c6489",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_RandomKFold_fold2.pt",
+      "n_referencias": 3231,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "eb2d46acafa5d50e30c9c86672fc24efebe18554fd9bf325043ffac809bddc12",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_RandomKFold_fold3.pt",
+      "n_referencias": 3231,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "57d2b6b039d3088998f79f59621a12a75c51bdbd157d543c39bfd395abecc119",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_RandomKFold_fold4.pt",
+      "n_referencias": 3232,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "778d48ee368867f8e70b09bd147770d5ccae1122eaeb55114dcf1e712b48857b",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_SpatialBlock_fold0.pt",
+      "n_referencias": 3443,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "259b4e890480a279d9e4bff755a8cbbb0a5e6ce586052f636a7576718b43964c",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_SpatialBlock_fold1.pt",
+      "n_referencias": 3277,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "7ed571b8f85ed3a338e31c82556377a6e14ce0cb8e5e602ee0b8f6abcb4dc995",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_SpatialBlock_fold2.pt",
+      "n_referencias": 3347,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "08e86cb36b51a3a3fa217a9e56626607e01f352bf88837f8fd2f73916c3fb503",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_SpatialBlock_fold3.pt",
+      "n_referencias": 2802,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "aaa64d27a8d8d5f197bdf9693f0535cc9af1a6040ae9d568850e4a1e8dd31df8",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/models/gnnwr_log_SpatialBlock_fold4.pt",
+      "n_referencias": 3287,
+      "n_features_con_intercepto": 28,
+      "contiene_IDs": false,
+      "sha256": "13ec6f7e478f7dde3687290cfccbfecf99549da0ab69bce711c941f4c2893ee6",
+      "estado": "historico_incompatible_con_matriz_actual",
+      "commit_entrenamiento": null,
+      "semilla_entrenamiento_no_certificada": null,
+      "identificadores_y_orden_referencias": "no guardados",
+      "escaladores": "no guardados"
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/gnnwr_log_predictions.csv",
+      "sha256": "ab5dca540dd052fd5c75f3e8b48fffb496f6d1043fdc19a0922703e93148a011",
+      "estado": "vigente",
+      "tipo": "predicciones_base",
+      "commit_entrenamiento": null,
+      "semilla_declarada_en_codigo": 42,
+      "limite": "No acredita un checkpoint correspondiente ni vectores de todas las semillas/folds."
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/gnnwr_log_replicas.csv",
+      "sha256": "613f1efe98105b13e54b2a90d67d87c98c71711197213913c6d097e97ab05b4d",
+      "estado": "vigente",
+      "tipo": "metricas_prueba_multisemilla",
+      "commit_entrenamiento": null,
+      "semilla_declarada_en_codigo": "ver columna seed del CSV",
+      "limite": "No acredita un checkpoint correspondiente ni vectores de todas las semillas/folds."
+    },
+    {
+      "archivo": "modelos/gnnwr/output_log/gnnwr_log_cv_replicas.csv",
+      "sha256": "c54367fa3a61d3bbddf8ac9a8a17228c042176ccb8c452f298652e3b9b4e0dde",
+      "estado": "vigente",
+      "tipo": "metricas_cv_multisemilla",
+      "commit_entrenamiento": null,
+      "semilla_declarada_en_codigo": "ver columna seed del CSV",
+      "limite": "No acredita un checkpoint correspondiente ni vectores de todas las semillas/folds."
+    }
+  ]
+}

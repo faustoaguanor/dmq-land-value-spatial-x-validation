@@ -2,15 +2,17 @@
 
 ## Alcance
 
-El repositorio permite auditar el código, el protocolo experimental, las semillas y los resultados agregados sin acceso a información restringida. La reproducción numérica exacta requiere obtener de las instituciones competentes las mismas versiones de las fuentes descritas en `DATA_AVAILABILITY.md`.
+El repositorio permite auditar el código, el protocolo experimental, las semillas y los resultados agregados sin acceso a información restringida. Recalcular métricas desde predicciones requiere los datos autorizados y los vectores correspondientes. La reproducción completa del entrenamiento no queda garantizada solo con obtener las fuentes: faltan vectores de todas las semillas/particiones y metadatos de algunos checkpoints. Ver [TRAZABILIDAD_ARTEFACTOS.md](TRAZABILIDAD_ARTEFACTOS.md).
 
-## Entorno de referencia
+## Entorno local de referencia
 
 - Python 3.12.10
 - CPU para OLS, GWR, Random Forest y análisis
 - NVIDIA RTX 4090 de 24 GB para las ejecuciones neuronales de referencia
 - PyTorch 2.5.1
 - CRS de modelado: EPSG:32717 (UTM zona 17S)
+
+La tabla de versiones corresponde al entorno local. El registro del pod de revisión metodológica de agosto conserva Python 3.10.12 y PyTorch 2.2.0+cu121; es una ejecución diferente de la reejecución GNNWR de septiembre. Los requisitos de instalación describen el entorno previsto, no todos los entornos históricos.
 
 Las operaciones CUDA pueden producir pequeñas diferencias entre hardware aun con la misma semilla.
 
@@ -65,7 +67,7 @@ El SANNWR canónico es `modelos/sannwr/sannwr_real_log.py`, con sus réplicas en
 
 ## Retransformación
 
-Los modelos predicen `log(valor_m2)`. Para volver a USD/m² se aplica el estimador de *smearing* de Duan calculado exclusivamente sobre residuos de entrenamiento:
+Los modelos predicen `log(valor_m2)`. En las dos validaciones cruzadas, los cinco modelos aplican *smearing* de Duan calculado exclusivamente sobre los residuos de entrenamiento de cada partición. En el conjunto de prueba principal, las réplicas de GNNWR y SANNWR-adaptado usan exponencial directa; Random Forest, GWR y OLS aplican *smearing*. Los análisis por predio y mapas usan las corridas base con el factor de su propio entrenamiento. Cuando corresponde aplicar el factor, la fórmula es:
 
 ```text
 y_hat_usd = exp(y_hat_log) * mean(exp(residual_train))
@@ -102,3 +104,13 @@ python -m unittest discover -s tests -v
 ```
 
 Estos controles verifican sintaxis, ausencia de artefactos restringidos, rutas portables y coherencia de los resultados canónicos.
+
+## Correcciones de análisis auxiliares incluidas en la entrega
+
+Con los datos autorizados, regenerar primero `figures/aplicacion_valoracion/generate_applied_maps.py` y después `figures/main_results/mapas_resultados.py` (requiere la capa parroquial externa). Ambos deben ejecutarse en el entorno privado: producen datos y figuras por predio que no se publican en este repositorio.
+
+Para tamaño efectivo: definir `TESIS_REPO` como raíz privada y ejecutar `revision_metodologica/obs6_n_efectivo/06_tamano_efectivo.py`. Publica solo resúmenes por modelo/pareja y hashes de procedencia, no vectores individuales. Holm usa la familia completa de diez parejas. Los valores p con tamaño efectivo son una sensibilidad aproximada y no sustituyen una evaluación espacial independiente.
+
+## Versión publicada
+
+La etiqueta [entrega-2026-09-21](https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/tree/entrega-2026-09-21) fija el código que acompaña al PDF. La máscara de imputación por observación se calcula en el entorno autorizado y no se incluye en el repositorio; se conservan los resúmenes agregados que permiten revisar ese análisis.

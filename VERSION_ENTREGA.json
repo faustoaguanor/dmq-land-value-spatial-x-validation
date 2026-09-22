@@ -1,0 +1,16 @@
+{
+  "version": "entrega-2026-09-21",
+  "fecha": "2026-09-21",
+  "etiqueta_publica": "entrega-2026-09-21",
+  "url_codigo": "https://github.com/faustoaguanor/dmq-land-value-spatial-x-validation/tree/entrega-2026-09-21",
+  "base_publica": "v2.8",
+  "commits_base": {
+    "primario": "18595698ba6a09fd876dd18b3c488fed2374c12e",
+    "publico": "d1306d3be66222944665343742ddf3673098c6d1",
+    "tesis": "594d8648ca4e090d87bc366b8e3559fa5ef3806f"
+  },
+  "codigo_adjunto": "codigo_reproducibilidad_2026-09-21.zip",
+  "alcance_publico": "Código, documentación y resultados agregados; sin datos por predio, predicciones individuales, pesos ni registros de ejecución.",
+  "nota": "La etiqueta de entrega incorpora las correcciones posteriores a v2.8. El manifiesto del archivo adjunto permite contrastar su contenido con la versión publicada.",
+  "fecha_publicacion": "2026-09-22"
+}
